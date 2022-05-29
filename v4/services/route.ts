@@ -1,10 +1,9 @@
 import { LineRoute } from "../interfaces/line-route.ts";
-import { StopRoute } from "../interfaces/stop-route.ts.ts";
 import { getRouteId, getStopsByRouteId } from "../utils/line-utils.ts";
 import { getLinesByStopId } from "../utils/stop-utils.ts";
 
 export async function getRoute(
-  urlSearchParams: URLSearchParams,
+  urlSearchParams: URLSearchParams
 ): Promise<Response> {
   const userStopId = urlSearchParams.get("stopId") ?? null;
   const userLineLabel = urlSearchParams.get("lineLabel") ?? null;
@@ -17,11 +16,11 @@ export async function getRoute(
 
 async function validateRequest(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): Promise<Response> {
   const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
     userStopId,
-    userLineLabel,
+    userLineLabel
   );
 
   if (invalid) {
@@ -30,7 +29,7 @@ async function validateRequest(
         emoji: "🙄",
         message: validationMessage,
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -46,7 +45,7 @@ interface ValidationResult {
 
 function geValidationResult(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): ValidationResult {
   const result: ValidationResult = {
     invalid: true,
@@ -85,20 +84,20 @@ function geValidationResult(
 function prepareResponse(stopId: number, lineLabel: string): Response {
   const response: LineRoute[] = [];
 
-  // Route
+  // Route ID
   const routeId = getRouteId(stopId, lineLabel);
 
-  // Stops
-  const stops: StopRoute[] = getStopsByRouteId(lineLabel, routeId);
+  // Route stops
+  const routeStops = getStopsByRouteId(lineLabel, routeId);
 
-  // Stop lines
-  for (let i = 0; i < stops.length; i++) {
-    const stop = stops[i];
-    const id = stop[0];
-    const name = stop[1];
+  // Line stops + available lines
+  // for every stop
+  for (const routeStop of routeStops) {
+    const routeStopId = routeStop[0];
+    const routeStopName = routeStop[1];
 
-    const lineLabels = getLinesByStopId(id);
-    const lineRoute: LineRoute = [id, name, lineLabels];
+    const lineLabels = getLinesByStopId(routeStopId);
+    const lineRoute: LineRoute = [routeStopId, routeStopName, lineLabels];
 
     response.push(lineRoute);
   }

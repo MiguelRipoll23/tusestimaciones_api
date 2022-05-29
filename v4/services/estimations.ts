@@ -1,5 +1,5 @@
 import { getLinesByStopId } from "../utils/stop-utils.ts";
-import { getStopsByStopIdAndLineLabel } from "../utils/line-utils.ts";
+import { getNextStopsForLineByStopIdAndLineLabel } from "../utils/line-utils.ts";
 
 import { document, node, parse } from "../../deps.ts";
 import { StopEstimations } from "../interfaces/stop-estimations.ts";
@@ -9,14 +9,14 @@ const ESTIMATIONS_WEB_SERVICE =
   "http://195.55.43.235:9001/services/dinamica.asmx";
 
 export async function getEstimations(
-  urlSearchParams: URLSearchParams,
+  urlSearchParams: URLSearchParams
 ): Promise<Response> {
   const userStopId = urlSearchParams.get("stopId") ?? null;
   const userLineLabel = urlSearchParams.get("lineLabel") ?? null;
 
   // Log
   console.info(
-    `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`,
+    `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`
   );
 
   return await validateRequest(userStopId, userLineLabel);
@@ -24,11 +24,11 @@ export async function getEstimations(
 
 async function validateRequest(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): Promise<Response> {
   const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
     userStopId,
-    userLineLabel,
+    userLineLabel
   );
 
   if (invalid) {
@@ -37,7 +37,7 @@ async function validateRequest(
         emoji: "🙄",
         message: validationMessage,
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -53,7 +53,7 @@ interface ValidationResult {
 
 function geValidationResult(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): ValidationResult {
   const result: ValidationResult = {
     invalid: true,
@@ -92,7 +92,7 @@ function geValidationResult(
 
 async function prepareResponse(
   stopId: number,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): Promise<Response> {
   const response: StopEstimations = [[], []];
 
@@ -105,7 +105,10 @@ async function prepareResponse(
       response[1] = getLinesByStopId(stopId);
     } else {
       // Add available stops for a line
-      response[1] = getStopsByStopIdAndLineLabel(stopId, userLineLabel);
+      response[1] = getNextStopsForLineByStopIdAndLineLabel(
+        stopId,
+        userLineLabel
+      );
     }
   }
 
@@ -117,12 +120,13 @@ async function prepareResponse(
 
 async function sendRequest(
   stopId: number,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): Promise<LineEstimations[]> {
   const lineLabel = userLineLabel ?? "*";
   const lineEstimations: LineEstimations[] = [];
 
-  const body = '<?xml version="1.0" encoding="utf-8"?>' +
+  const body =
+    '<?xml version="1.0" encoding="utf-8"?>' +
     `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <soap:Body>
         <GetPasoParada xmlns="http://tempuri.org/">
@@ -183,17 +187,26 @@ function parseDocument(document: document, lineEstimations: LineEstimations[]) {
   }
 
   for (let i = soapItems.length - 1; i >= 0; i--) {
-    const soapItem = soapItems[i] as node;
-    const lineLabel = soapItem["linea"] as string;
-    const lineDestination = soapItem["ruta"] as string;
-    const lineEstimation1 = soapItem["e1"] as node;
-    const lineMinutes1 = lineEstimation1?.["minutos"] as number;
-    const lineEstimation2 = soapItem["e2"] as node;
-    const lineMinutes2 = lineEstimation2?.["minutos"] as number;
+    const soapItemNode = soapItems[i] as node;
+    const lineLabelNode = soapItemNode["linea"] as string;
+    const lineDestinationNode = soapItemNode["ruta"] as string;
+    const lineEstimation1Node = soapItemNode["e1"] as node;
+    const lineEstimation2Node = soapItemNode["e2"] as node;
+
+    let lineLabel = "0";
+
+    if (typeof lineLabelNode === "number") {
+      lineLabel = (lineLabelNode as number).toString();
+    } else if (typeof lineLabelNode === "string") {
+      lineLabel = lineLabelNode;
+    }
+
+    const lineMinutes1 = lineEstimation1Node?.["minutos"] as number;
+    const lineMinutes2 = lineEstimation2Node?.["minutos"] as number;
 
     const result: LineEstimations = [
-      <string>lineLabel,
-      lineDestination,
+      lineLabel,
+      lineDestinationNode,
       lineMinutes1,
       lineMinutes2,
     ];

@@ -1,15 +1,14 @@
-import routeLines from "./../data/routes-lines.min.json" assert {
-  type: "json",
-};
-import routeStops from "./../data/routes-stops.min.json" assert {
-  type: "json",
-};
+import { StopRoute } from "../interfaces/stop-route.ts.ts";
+import routeLines from "./../data/routes-lines.min.json" assert { type: "json" };
+import routeStops from "./../data/routes-stops.min.json" assert { type: "json" };
 
 export function getRouteId(stopId: number, lineLabel: string): string | null {
   if (stopId in routeLines === false) {
     return null;
   }
 
+  // Get all routes identifiers
+  // for stopId
   const stopIdAsString = stopId.toString();
   const stopIdIndex = stopIdAsString as keyof typeof routeLines;
   const stopRoutes = routeLines[stopIdIndex];
@@ -18,20 +17,15 @@ export function getRouteId(stopId: number, lineLabel: string): string | null {
     return null;
   }
 
+  // Filter by line label
   const lineLabelIndex = lineLabel as keyof typeof stopRoutes;
   return stopRoutes[lineLabelIndex];
 }
 
-export function getRoutesByLineLabel(lineLabel: string) {
-  if (lineLabel in routeStops === false) {
-    return null;
-  }
-
-  const lineLabelIndex = lineLabel as keyof typeof routeStops;
-  return routeStops[lineLabelIndex];
-}
-
-export function getStopsByRouteId(lineLabel: string, routeId: string | null) {
+export function getStopsByRouteId(
+  lineLabel: string,
+  routeId: string | null
+): StopRoute[] {
   if (routeId === null) {
     return [];
   }
@@ -40,6 +34,8 @@ export function getStopsByRouteId(lineLabel: string, routeId: string | null) {
     return [];
   }
 
+  // Get all stops routes
+  // for a line label
   const lineLabelIndex = lineLabel as keyof typeof routeStops;
   const routesLine = routeStops[lineLabelIndex];
 
@@ -47,40 +43,41 @@ export function getStopsByRouteId(lineLabel: string, routeId: string | null) {
     return [];
   }
 
+  // Filter by route ID
   const routeIdIndex = routeId as keyof typeof routesLine;
   return routesLine[routeIdIndex];
 }
 
-export function getStopsByStopIdAndLineLabel(
+export function getNextStopsForLineByStopIdAndLineLabel(
   stopId: number,
-  lineLabel: string,
+  lineLabel: string
 ) {
-  const results: string[] = [];
+  const stopNames: string[] = [];
+
+  // Route ID
   const routeId = getRouteId(stopId, lineLabel);
 
-  if (routeId === null) {
-    return results;
-  }
+  // Route stops
+  const routeStops = getStopsByRouteId(lineLabel, routeId);
 
-  const stops = getStopsByRouteId(lineLabel, routeId);
-
-  if (stops === null) {
-    return results;
-  }
-
+  // Use current stop as index
+  // to get the next 5 stops
   let found = false;
 
-  for (const route of stops) {
-    if (found) {
-      results.push(route[1]);
+  for (const routeStop of routeStops) {
+    const routeStopId = routeStop[0];
 
-      if (results.length === 5) {
+    if (found) {
+      const routeStopName = routeStop[1];
+      stopNames.push(routeStopName);
+
+      if (stopNames.length === 5) {
         break;
       }
-    } else if (route[0] === stopId) {
+    } else if (routeStopId === stopId) {
       found = true;
     }
   }
 
-  return results;
+  return stopNames;
 }

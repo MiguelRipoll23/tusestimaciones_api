@@ -1,7 +1,7 @@
 {
   "tasks": {
     "run": "deno run --allow-net main.ts",
-    "compile": "deno compile --allow-net --output tusestimaciones-api main.ts",
+    "compile": "deno compile --allow-net --output server main.ts",
     "fmt": "deno fmt",
     "lint": "deno lint"
   }

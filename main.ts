@@ -11,7 +11,7 @@ async function handler(req: Request): Promise<Response> {
   const searchParams = url.searchParams;
 
   const paths = pathname.split("/");
-  const version = paths[1] ?? null;
+  const version = paths[1] || null;
 
   if (version === null) {
     return Response.json({

@@ -192,7 +192,7 @@ function parseDocument(document: document, lineEstimations: LineEstimations[]) {
     const lineMinutes2 = lineEstimation2?.["minutos"] as number;
 
     const result: LineEstimations = [
-      lineLabel,
+      <string>lineLabel,
       lineDestination,
       lineMinutes1,
       lineMinutes2,

@@ -5,8 +5,7 @@ import { document, node, parse } from "../../deps.ts";
 import { StopEstimations } from "../interfaces/stop-estimations.ts";
 import { LineEstimations } from "../interfaces/line-estimations.ts";
 
-const ESTIMATIONS_WEB_SERVICE =
-  "http://195.55.43.235:9001/services/dinamica.asmx";
+const ENV_ESTIMATIONS_WEB_SERVICE_URL = "ESTIMATIONS_WEB_SERVICE_URL";
 
 export async function getEstimations(
   urlSearchParams: URLSearchParams
@@ -122,6 +121,12 @@ async function sendRequest(
   stopId: number,
   userLineLabel: string | null
 ): Promise<LineEstimations[]> {
+  const estimationsWebServiceUrl = Deno.env.get(ENV_ESTIMATIONS_WEB_SERVICE_URL);
+
+  if (estimationsWebServiceUrl === undefined) {
+    throw new Error(`Environment variable ${ENV_ESTIMATIONS_WEB_SERVICE_URL} is not defined`);
+  }
+
   const lineLabel = userLineLabel ?? "*";
   const lineEstimations: LineEstimations[] = [];
 
@@ -146,7 +151,7 @@ async function sendRequest(
     body: body,
   };
 
-  await fetch(ESTIMATIONS_WEB_SERVICE, options)
+  await fetch(estimationsWebServiceUrl, options)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Status code (" + response.status + ")");

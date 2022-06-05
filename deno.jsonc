@@ -1,7 +1,7 @@
 {
   "tasks": {
-    "run": "deno run --allow-net main.ts",
-    "compile": "deno compile --allow-net --output server main.ts",
+    "run": "deno run --allow-env --allow-net main.ts",
+    "compile": "deno compile --allow-env --allow-net --output server main.ts",
     "fmt": "deno fmt",
     "lint": "deno lint"
   }

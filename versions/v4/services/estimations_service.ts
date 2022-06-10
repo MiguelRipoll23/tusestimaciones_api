@@ -1,9 +1,9 @@
-import { getLinesByStopId } from "../utils/stop-utils.ts";
-import { getNextStopsForLineByStopIdAndLineLabel } from "../utils/line-utils.ts";
+import { getLinesByStopId } from "../utils/stop_utils.ts";
+import { getNextStopsForLineByStopIdAndLineLabel } from "../utils/line_utils.ts";
 
-import { document, node, parse } from "../../deps.ts";
-import { StopEstimations } from "../interfaces/stop-estimations.ts";
-import { LineEstimations } from "../interfaces/line-estimations.ts";
+import { document, node, parse } from "../../../deps.ts";
+import { StopEstimations } from "../interfaces/stop_estimations_interface.ts";
+import { LineEstimations } from "../interfaces/line_estimations_interface.ts";
 
 const ENV_ESTIMATIONS_WEB_SERVICE_URL = "ESTIMATIONS_WEB_SERVICE_URL";
 

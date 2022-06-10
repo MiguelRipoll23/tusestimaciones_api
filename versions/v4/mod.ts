@@ -1,5 +1,5 @@
-import { getEstimations } from "./services/estimations.ts";
-import { getRoute } from "./services/route.ts";
+import { getEstimations } from "./services/estimations_service.ts";
+import { getRoute } from "./services/route_service.ts";
 
 const availableEndpoints = { estimations: getEstimations, route: getRoute };
 

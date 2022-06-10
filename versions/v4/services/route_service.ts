@@ -1,6 +1,6 @@
-import { LineRoute } from "../interfaces/line-route.ts";
-import { getRouteId, getStopsByRouteId } from "../utils/line-utils.ts";
-import { getLinesByStopId } from "../utils/stop-utils.ts";
+import { LineRoute } from "../interfaces/line_route_interface.ts";
+import { getRouteId, getStopsByRouteId } from "../utils/line_utils.ts";
+import { getLinesByStopId } from "../utils/stop_utils.ts";
 
 export async function getRoute(
   urlSearchParams: URLSearchParams

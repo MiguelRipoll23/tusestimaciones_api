@@ -1,4 +1,17 @@
 {
+  "compilerOptions": {
+    "strict": true
+  },
+  "fmt": {
+    "files": {
+      "exclude": [
+        ".git",
+        "versions/v4/data/lines.min.json",
+        "versions/v4/data/routes-lines.min.json",
+        "versions/v4/data/routes-stops.min.json"
+      ]
+    }
+  },
   "tasks": {
     "run": "deno run --allow-env --allow-net --watch mod.ts",
     "compile": "deno compile --allow-env --allow-net --output server mod.ts",

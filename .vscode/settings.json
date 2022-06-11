@@ -1,5 +1,10 @@
 {
   "editor.defaultFormatter": "denoland.vscode-deno",
   "editor.formatOnPaste": true,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "deno.enable": true,
+  "cSpell.words": [
+    "denoland",
+    "tusestimaciones"
+  ]
 }

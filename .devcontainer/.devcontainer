@@ -1,0 +1,10 @@
+{
+    "name": "tusestimaciones-api",
+    "forwardPorts": [8000],
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "denoland.vscode-deno"
+    ]
+}

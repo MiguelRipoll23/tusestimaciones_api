@@ -4,6 +4,12 @@ import { StopEstimations } from "../interfaces/stop_estimations_interface.ts";
 
 import SoapAdapter from "../../../adapters/soap_adapter.ts";
 
+const adapter = SoapAdapter;
+
+export function checkConfiguration(): void {
+  adapter.checkConfiguration();
+}
+
 export async function getEstimations(
   urlSearchParams: URLSearchParams,
 ): Promise<Response> {
@@ -93,7 +99,7 @@ async function prepareResponse(
   const response: StopEstimations = [[], []];
 
   // Data
-  response[0] = await SoapAdapter.getEstimationsData(stopId, userLineLabel);
+  response[0] = await adapter.getEstimationsData(stopId, userLineLabel);
 
   // Additional data
   if (response[0].length > 0) {

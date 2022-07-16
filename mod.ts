@@ -5,6 +5,13 @@ import v4 from "./versions/v4/mod.ts";
 
 const availableVersions = { v4 };
 
+function checker(): void {
+  for (const version in availableVersions) {
+    const versionIndex = version as keyof typeof availableVersions;
+    availableVersions[versionIndex].checker();
+  }
+}
+
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const pathname = url.pathname;
@@ -32,4 +39,5 @@ async function handler(req: Request): Promise<Response> {
   );
 }
 
+checker();
 serve(handler);

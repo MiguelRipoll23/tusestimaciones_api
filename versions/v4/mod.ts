@@ -1,9 +1,13 @@
-import { getEstimations } from "./services/estimations_service.ts";
+import { checkConfiguration, getEstimations } from "./services/estimations_service.ts";
 import { getRoute } from "./services/route_service.ts";
 
 const availableEndpoints = { estimations: getEstimations, route: getRoute };
 
-export async function handler(
+function checker(): void {
+  checkConfiguration();
+}
+
+async function handler(
   paths: string[],
   urlSearchParams: URLSearchParams,
 ): Promise<Response> {
@@ -32,5 +36,6 @@ export async function handler(
 }
 
 export default {
+  checker,
   handler,
 };

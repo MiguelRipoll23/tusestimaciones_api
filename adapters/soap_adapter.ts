@@ -1,22 +1,30 @@
 import { document, node, parse } from "../deps.ts";
 import { LineEstimations } from "../versions/v4/interfaces/line_estimations_interface.ts";
 
+// Constants
 const ENV_ESTIMATIONS_WEB_SERVICE_URL = "ESTIMATIONS_WEB_SERVICE_URL";
 
-async function getEstimationsData(
-  stopId: number,
-  userLineLabel: string | null,
-): Promise<LineEstimations[]> {
-  const estimationsWebServiceUrl = Deno.env.get(
+// Variables
+let estimationsWebServiceUrl: string | null | undefined = null;
+
+function checkConfiguration() {
+  estimationsWebServiceUrl = Deno.env.get(
     ENV_ESTIMATIONS_WEB_SERVICE_URL,
   );
 
   if (estimationsWebServiceUrl === undefined) {
     throw new Error(
-      `Environment variable ${ENV_ESTIMATIONS_WEB_SERVICE_URL} is not defined`,
+      "Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL,
     );
   }
 
+  console.info("Estimations Web Service URL: " + estimationsWebServiceUrl);
+}
+
+async function getEstimationsData(
+  stopId: number,
+  userLineLabel: string | null,
+): Promise<LineEstimations[]> {
   const lineLabel = userLineLabel ?? "*";
   const lineEstimations: LineEstimations[] = [];
 
@@ -39,6 +47,11 @@ async function getEstimationsData(
     },
     body: body,
   };
+
+  if (estimationsWebServiceUrl === undefined || estimationsWebServiceUrl === null) {
+    console.error("Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL);
+    return lineEstimations;
+  }
 
   await fetch(estimationsWebServiceUrl, options)
     .then((response) => {
@@ -127,5 +140,6 @@ function parseDocument(document: document, lineEstimations: LineEstimations[]) {
 }
 
 export default {
+  checkConfiguration,
   getEstimationsData,
 };

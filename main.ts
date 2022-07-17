@@ -27,7 +27,9 @@ async function handler(req: Request): Promise<Response> {
       emoji: "🦕",
       versions: Object.keys(availableVersions),
     });
-  } else if (VERSION_PATTERN.test(version)) {
+  }
+
+  if (VERSION_PATTERN.test(version)) {
     if (version in availableVersions) {
       const versionIndex = version as keyof typeof availableVersions;
       return await availableVersions[versionIndex].handler(url);

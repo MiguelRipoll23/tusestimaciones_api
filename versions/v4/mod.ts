@@ -11,10 +11,13 @@ function checker(): void {
 }
 
 async function handler(
-  paths: string[],
-  urlSearchParams: URLSearchParams
+  url: URL,
 ): Promise<Response> {
-  const endpoint = paths[2] ?? null;
+  const urlPattern = new URLPattern({ pathname: '/:version/:endpoint{/}?' });
+  const urlPatternResult = urlPattern.exec(url);
+
+  const version = urlPatternResult?.pathname.groups.version || 'v?';
+  const endpoint = urlPatternResult?.pathname.groups.endpoint || null;
 
   if (endpoint === null) {
     return Response.json({
@@ -26,13 +29,16 @@ async function handler(
   const endpointIndex = endpoint as keyof typeof availableEndpoints;
 
   if (endpointIndex in availableEndpoints) {
-    return await availableEndpoints[endpointIndex](urlSearchParams);
+    const urlSearchParams = url.searchParams;
+    return await availableEndpoints[endpointIndex](version, urlSearchParams);
   }
+
+  console.error(`Unknown endpoint: ${endpoint}`);
 
   return Response.json(
     {
       emoji: "☄️",
-      message: "Not found",
+      message: "Endpoint not found",
     },
     { status: 404 }
   );

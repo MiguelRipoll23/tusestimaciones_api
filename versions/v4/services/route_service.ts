@@ -2,12 +2,19 @@ import { LineRoute } from "../interfaces/line_route_interface.ts";
 import { getRouteId, getStopsByRouteId } from "../utils/line_utils.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
 
-async function getRoute(urlSearchParams: URLSearchParams): Promise<Response> {
+export async function getRoute(
+  version: string,
+  urlSearchParams: URLSearchParams
+): Promise<Response> {
   const userStopId = urlSearchParams.get("stopId") ?? null;
   const userLineLabel = urlSearchParams.get("lineLabel") ?? null;
 
   // Log
-  console.info(`getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`);
+  console.info(
+    `${version}.` +
+    `route_service.` +
+    `getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`
+  );
 
   return await validateRequest(userStopId, userLineLabel);
 }
@@ -22,6 +29,8 @@ async function validateRequest(
   );
 
   if (invalid) {
+    console.warn(`Invalid request: ${validationMessage}`);
+
     return Response.json(
       {
         emoji: "🙄",

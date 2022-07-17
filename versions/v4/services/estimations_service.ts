@@ -4,13 +4,14 @@ import { StopEstimations } from "../interfaces/stop_estimations_interface.ts";
 
 import SoapAdapter from "../../../adapters/soap_adapter.ts";
 
-const adapter = SoapAdapter;
+const Adapter = SoapAdapter;
 
-function checkConfiguration(): void {
-  adapter.checkConfiguration();
+export function checkConfiguration(): void {
+  Adapter.checkConfiguration();
 }
 
-async function getEstimations(
+export async function getEstimations(
+  version: string,
   urlSearchParams: URLSearchParams
 ): Promise<Response> {
   const userStopId = urlSearchParams.get("stopId") ?? null;
@@ -18,6 +19,8 @@ async function getEstimations(
 
   // Log
   console.info(
+    `${version}.` +
+    `estimations_service.` +
     `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`
   );
 
@@ -34,6 +37,8 @@ async function validateRequest(
   );
 
   if (invalid) {
+    console.warn(`Invalid request: ${validationMessage}`);
+
     return Response.json(
       {
         emoji: "🙄",
@@ -99,7 +104,7 @@ async function prepareResponse(
   const response: StopEstimations = [[], []];
 
   // Data
-  response[0] = await adapter.getEstimationsData(stopId, userLineLabel);
+  response[0] = await Adapter.getEstimationsData(stopId, userLineLabel);
 
   // Additional data
   if (response[0].length > 0) {

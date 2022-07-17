@@ -1,6 +1,11 @@
 import { LineRoute } from "../interfaces/line_route_interface.ts";
 import { getRouteId, getStopsByRouteId } from "../utils/line_utils.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
+import { addAccessControlAllowOriginHeader } from "../utils/response_utils.ts";
+
+const MESSAGE_STOP_ID_REQUIRED = "stopId is required";
+const MESSAGE_STOP_ID_INVALID = "stopId is invalid";
+const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
 export async function getRoute(
   version: string,
@@ -62,21 +67,21 @@ function geValidationResult(
   };
 
   if (userStopId === null) {
-    result.validationMessage = "stopId is required";
+    result.validationMessage = MESSAGE_STOP_ID_REQUIRED;
     return result;
   }
 
   const stopId = parseInt(userStopId);
 
   if (isNaN(stopId)) {
-    result.validationMessage = "stopId is invalid";
+    result.validationMessage = MESSAGE_STOP_ID_INVALID;
     return result;
   }
 
   result.stopId = stopId;
 
   if (userLineLabel === null) {
-    result.validationMessage = "lineLabel is required";
+    result.validationMessage = MESSAGE_LINE_LABEL_REQUIRED;
     return result;
   }
 
@@ -110,7 +115,7 @@ function prepareResponse(stopId: number, lineLabel: string): Response {
   }
 
   const headers = new Headers();
-  headers.set("Access-Control-Allow-Origin", "*");
+  addAccessControlAllowOriginHeader(headers);
 
   return Response.json(response, { headers });
 }

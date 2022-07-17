@@ -1,10 +1,15 @@
+import { StopEstimations } from "../interfaces/stop_estimations_interface.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
 import { getNextStopsForLineByStopIdAndLineLabel } from "../utils/line_utils.ts";
-import { StopEstimations } from "../interfaces/stop_estimations_interface.ts";
+import { addAccessControlAllowOriginHeader } from "../utils/response_utils.ts";
 
 import SoapAdapter from "../../../adapters/soap_adapter.ts";
 
 const Adapter = SoapAdapter;
+
+const MESSAGE_STOP_ID_REQUIRED = "stopId is required";
+const MESSAGE_STOP_ID_INVALID = "stopId is invalid";
+const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
 export function checkConfiguration(): void {
   Adapter.checkConfiguration();
@@ -70,14 +75,14 @@ function geValidationResult(
   };
 
   if (userStopId === null) {
-    result.validationMessage = "stopId is required";
+    result.validationMessage = MESSAGE_STOP_ID_REQUIRED;
     return result;
   }
 
   const stopId = parseInt(userStopId);
 
   if (isNaN(stopId)) {
-    result.validationMessage = "stopId is invalid";
+    result.validationMessage = MESSAGE_STOP_ID_INVALID;
     return result;
   }
 
@@ -85,7 +90,7 @@ function geValidationResult(
 
   if (userLineLabel !== null) {
     if (userLineLabel.length === 0) {
-      result.validationMessage = "lineLabel is required";
+      result.validationMessage = MESSAGE_LINE_LABEL_REQUIRED;
       return result;
     }
 
@@ -121,7 +126,7 @@ async function prepareResponse(
   }
 
   const headers = new Headers();
-  headers.set("Access-Control-Allow-Origin", "*");
+  addAccessControlAllowOriginHeader(headers);
 
   return Response.json(response, { headers });
 }

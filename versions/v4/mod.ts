@@ -1,6 +1,8 @@
 import EstimationsService from "./services/estimations_service.ts";
 import RouteService from "./services/route_service.ts";
 
+const MESSAGE_ENDPOINT_NOT_FOUND = "Endpoint not found";
+
 const availableEndpoints = {
   estimations: EstimationsService.getEstimations,
   route: RouteService.getRoute,
@@ -36,7 +38,7 @@ async function handler(url: URL): Promise<Response> {
   return Response.json(
     {
       emoji: "☄️",
-      message: "Endpoint not found",
+      message: MESSAGE_ENDPOINT_NOT_FOUND,
     },
     { status: 404 }
   );

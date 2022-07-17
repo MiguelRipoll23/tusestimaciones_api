@@ -3,6 +3,10 @@ import { serve } from "https://deno.land/std@0.141.0/http/server.ts";
 // Versions
 import v4 from "./versions/v4/mod.ts";
 
+const VERSION_PATTERN = /v\d+/g;
+const MESSAGE_VERSION_NOT_FOUND = "Version not found";
+const MESSAGE_NOT_FOUND = "Not found";
+
 const availableVersions = { v4 };
 
 function checker(): void {
@@ -23,17 +27,27 @@ async function handler(req: Request): Promise<Response> {
       emoji: "🦕",
       versions: Object.keys(availableVersions),
     });
-  } else if (version in availableVersions) {
-    const versionIndex = version as keyof typeof availableVersions;
-    return await availableVersions[versionIndex].handler(url);
-  }
+  } else if (VERSION_PATTERN.test(version)) {
+    if (version in availableVersions) {
+      const versionIndex = version as keyof typeof availableVersions;
+      return await availableVersions[versionIndex].handler(url);
+    } else {
+      console.warn(`Unknown version: ${version}`);
 
-  console.error(`Unknown version: ${version}`);
+      return Response.json(
+        {
+          emoji: "☄️",
+          message: MESSAGE_VERSION_NOT_FOUND,
+        },
+        { status: 404 }
+      );
+    }
+  }
 
   return Response.json(
     {
       emoji: "☄️",
-      message: "Version not found",
+      message: MESSAGE_NOT_FOUND,
     },
     { status: 404 }
   );

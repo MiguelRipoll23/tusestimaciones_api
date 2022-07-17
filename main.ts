@@ -14,11 +14,9 @@ function checker(): void {
 
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
-  const pathname = url.pathname;
-  const searchParams = url.searchParams;
-
-  const paths = pathname.split("/");
-  const version = paths[1] || null;
+  const urlPattern = new URLPattern({ pathname: '/:version{/*}?' });
+  const urlPatternResult = urlPattern.exec(url);
+  const version = urlPatternResult?.pathname.groups.version || null;
 
   if (version === null) {
     return Response.json({
@@ -27,13 +25,15 @@ async function handler(req: Request): Promise<Response> {
     });
   } else if (version in availableVersions) {
     const versionIndex = version as keyof typeof availableVersions;
-    return await availableVersions[versionIndex].handler(paths, searchParams);
+    return await availableVersions[versionIndex].handler(url);
   }
+
+  console.error(`Unknown version: ${version}`);
 
   return Response.json(
     {
       emoji: "☄️",
-      message: "Not found",
+      message: "Version not found",
     },
     { status: 404 }
   );

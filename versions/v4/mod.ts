@@ -1,15 +1,18 @@
-import { checkConfiguration, getEstimations } from "./services/estimations_service.ts";
-import { getRoute } from "./services/route_service.ts";
+import EstimationsService from "./services/estimations_service.ts";
+import RouteService from "./services/route_service.ts";
 
-const availableEndpoints = { estimations: getEstimations, route: getRoute };
+const availableEndpoints = {
+  estimations: EstimationsService.getEstimations,
+  route: RouteService.getRoute,
+};
 
 function checker(): void {
-  checkConfiguration();
+  EstimationsService.checkConfiguration();
 }
 
 async function handler(
   paths: string[],
-  urlSearchParams: URLSearchParams,
+  urlSearchParams: URLSearchParams
 ): Promise<Response> {
   const endpoint = paths[2] ?? null;
 
@@ -31,7 +34,7 @@ async function handler(
       emoji: "☄️",
       message: "Not found",
     },
-    { status: 404 },
+    { status: 404 }
   );
 }
 

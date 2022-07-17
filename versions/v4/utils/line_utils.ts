@@ -1,10 +1,6 @@
 import { StopRoute } from "../interfaces/stop_route_interface.ts";
-import routeLines from "./../data/routes-lines.min.json" assert {
-  type: "json",
-};
-import routeStops from "./../data/routes-stops.min.json" assert {
-  type: "json",
-};
+import routeLines from "./../data/routes-lines.min.json" assert { type: "json" };
+import routeStops from "./../data/routes-stops.min.json" assert { type: "json" };
 
 export function getRouteId(stopId: number, lineLabel: string): string | null {
   if (stopId in routeLines === false) {
@@ -28,7 +24,7 @@ export function getRouteId(stopId: number, lineLabel: string): string | null {
 
 export function getStopsByRouteId(
   lineLabel: string,
-  routeId: string | null,
+  routeId: string | null
 ): StopRoute[] {
   if (routeId === null) {
     return [];
@@ -54,7 +50,7 @@ export function getStopsByRouteId(
 
 export function getNextStopsForLineByStopIdAndLineLabel(
   stopId: number,
-  lineLabel: string,
+  lineLabel: string
 ) {
   const stopNames: string[] = [];
 

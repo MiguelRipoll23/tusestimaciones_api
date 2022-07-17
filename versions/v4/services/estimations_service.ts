@@ -6,19 +6,19 @@ import SoapAdapter from "../../../adapters/soap_adapter.ts";
 
 const adapter = SoapAdapter;
 
-export function checkConfiguration(): void {
+function checkConfiguration(): void {
   adapter.checkConfiguration();
 }
 
-export async function getEstimations(
-  urlSearchParams: URLSearchParams,
+async function getEstimations(
+  urlSearchParams: URLSearchParams
 ): Promise<Response> {
   const userStopId = urlSearchParams.get("stopId") ?? null;
   const userLineLabel = urlSearchParams.get("lineLabel") ?? null;
 
   // Log
   console.info(
-    `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`,
+    `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`
   );
 
   return await validateRequest(userStopId, userLineLabel);
@@ -26,11 +26,11 @@ export async function getEstimations(
 
 async function validateRequest(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): Promise<Response> {
   const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
     userStopId,
-    userLineLabel,
+    userLineLabel
   );
 
   if (invalid) {
@@ -39,7 +39,7 @@ async function validateRequest(
         emoji: "🙄",
         message: validationMessage,
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -55,7 +55,7 @@ interface ValidationResult {
 
 function geValidationResult(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): ValidationResult {
   const result: ValidationResult = {
     invalid: true,
@@ -94,7 +94,7 @@ function geValidationResult(
 
 async function prepareResponse(
   stopId: number,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): Promise<Response> {
   const response: StopEstimations = [[], []];
 
@@ -110,7 +110,7 @@ async function prepareResponse(
       // Add available stops for a line
       response[1] = getNextStopsForLineByStopIdAndLineLabel(
         stopId,
-        userLineLabel,
+        userLineLabel
       );
     }
   }
@@ -120,3 +120,8 @@ async function prepareResponse(
 
   return Response.json(response, { headers });
 }
+
+export default {
+  checkConfiguration,
+  getEstimations,
+};

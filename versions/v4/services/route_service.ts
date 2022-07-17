@@ -2,9 +2,7 @@ import { LineRoute } from "../interfaces/line_route_interface.ts";
 import { getRouteId, getStopsByRouteId } from "../utils/line_utils.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
 
-export async function getRoute(
-  urlSearchParams: URLSearchParams,
-): Promise<Response> {
+async function getRoute(urlSearchParams: URLSearchParams): Promise<Response> {
   const userStopId = urlSearchParams.get("stopId") ?? null;
   const userLineLabel = urlSearchParams.get("lineLabel") ?? null;
 
@@ -16,11 +14,11 @@ export async function getRoute(
 
 async function validateRequest(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): Promise<Response> {
   const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
     userStopId,
-    userLineLabel,
+    userLineLabel
   );
 
   if (invalid) {
@@ -29,7 +27,7 @@ async function validateRequest(
         emoji: "🙄",
         message: validationMessage,
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -45,7 +43,7 @@ interface ValidationResult {
 
 function geValidationResult(
   userStopId: string | null,
-  userLineLabel: string | null,
+  userLineLabel: string | null
 ): ValidationResult {
   const result: ValidationResult = {
     invalid: true,
@@ -107,3 +105,7 @@ function prepareResponse(stopId: number, lineLabel: string): Response {
 
   return Response.json(response, { headers });
 }
+
+export default {
+  getRoute,
+};

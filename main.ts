@@ -35,7 +35,7 @@ async function handler(req: Request): Promise<Response> {
       emoji: "☄️",
       message: "Not found",
     },
-    { status: 404 },
+    { status: 404 }
   );
 }
 

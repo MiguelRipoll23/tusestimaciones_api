@@ -12,8 +12,8 @@ export async function getRoute(
   // Log
   console.info(
     `${version}.` +
-    `route_service.` +
-    `getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`
+      "route_service." +
+      `getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`
   );
 
   return await validateRequest(userStopId, userLineLabel);

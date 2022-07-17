@@ -14,7 +14,7 @@ function checker(): void {
 
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
-  const urlPattern = new URLPattern({ pathname: '/:version{/*}?' });
+  const urlPattern = new URLPattern({ pathname: "/:version{/*}?" });
   const urlPatternResult = urlPattern.exec(url);
   const version = urlPatternResult?.pathname.groups.version || null;
 

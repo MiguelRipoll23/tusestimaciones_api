@@ -3,8 +3,8 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "deno.enable": true,
-  "cSpell.words": [
-    "denoland",
-    "tusestimaciones"
-  ]
+  "cSpell.words": ["denoland", "tusestimaciones"],
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

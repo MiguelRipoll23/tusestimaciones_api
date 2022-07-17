@@ -20,8 +20,8 @@ export async function getEstimations(
   // Log
   console.info(
     `${version}.` +
-    `estimations_service.` +
-    `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`
+      "estimations_service." +
+      `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`
   );
 
   return await validateRequest(userStopId, userLineLabel);

@@ -10,13 +10,11 @@ function checker(): void {
   EstimationsService.checkConfiguration();
 }
 
-async function handler(
-  url: URL,
-): Promise<Response> {
-  const urlPattern = new URLPattern({ pathname: '/:version/:endpoint{/}?' });
+async function handler(url: URL): Promise<Response> {
+  const urlPattern = new URLPattern({ pathname: "/:version/:endpoint{/}?" });
   const urlPatternResult = urlPattern.exec(url);
 
-  const version = urlPatternResult?.pathname.groups.version || 'v?';
+  const version = urlPatternResult?.pathname.groups.version || "v?";
   const endpoint = urlPatternResult?.pathname.groups.endpoint || null;
 
   if (endpoint === null) {

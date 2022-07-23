@@ -3,7 +3,7 @@ import { serve } from "https://deno.land/std@0.141.0/http/server.ts";
 // Versions
 import v4 from "./versions/v4/mod.ts";
 
-const VERSION_PATTERN = /v\d+/g;
+const VERSION_PATTERN = /v\d+/;
 const MESSAGE_VERSION_NOT_FOUND = "Version not found";
 const MESSAGE_NOT_FOUND = "Not found";
 

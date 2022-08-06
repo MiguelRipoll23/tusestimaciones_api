@@ -9,14 +9,14 @@ const MESSAGE_NOT_FOUND = "Not found";
 
 const availableVersions = { v4 };
 
-function checker(): void {
+function checkConfiguration(): void {
   for (const version in availableVersions) {
     const versionIndex = version as keyof typeof availableVersions;
-    availableVersions[versionIndex].checker();
+    availableVersions[versionIndex].checkConfiguration();
   }
 }
 
-async function handler(req: Request): Promise<Response> {
+async function handleRequest(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const pathname = url.pathname;
   const searchParams = url.searchParams;
@@ -36,7 +36,7 @@ async function handler(req: Request): Promise<Response> {
     if (version in availableVersions) {
       const versionIndex = version as keyof typeof availableVersions;
 
-      return await availableVersions[versionIndex].handler(
+      return await availableVersions[versionIndex].handleRequest(
         pathname,
         searchParams
       );
@@ -62,5 +62,5 @@ async function handler(req: Request): Promise<Response> {
   );
 }
 
-checker();
-serve(handler);
+checkConfiguration();
+serve(handleRequest);

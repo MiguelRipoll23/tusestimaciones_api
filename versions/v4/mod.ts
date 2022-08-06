@@ -8,11 +8,11 @@ const availableEndpoints = {
   route: RouteService.getRoute,
 };
 
-function checker(): void {
+function checkConfiguration(): void {
   EstimationsService.checkConfiguration();
 }
 
-async function handler(
+async function handleRequest(
   pathname: string,
   searchParams: URLSearchParams
 ): Promise<Response> {
@@ -47,6 +47,6 @@ async function handler(
 }
 
 export default {
-  checker,
-  handler,
+  checkConfiguration,
+  handleRequest,
 };

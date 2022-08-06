@@ -12,9 +12,12 @@ function checker(): void {
   EstimationsService.checkConfiguration();
 }
 
-async function handler(url: URL): Promise<Response> {
+async function handler(
+  pathname: string,
+  searchParams: URLSearchParams
+): Promise<Response> {
   const urlPattern = new URLPattern({ pathname: "/:version/:endpoint{/}?" });
-  const urlPatternResult = urlPattern.exec(url);
+  const urlPatternResult = urlPattern.exec({ pathname });
 
   const version = urlPatternResult?.pathname.groups.version || "v?";
   const endpoint = urlPatternResult?.pathname.groups.endpoint || null;
@@ -29,8 +32,7 @@ async function handler(url: URL): Promise<Response> {
   const endpointIndex = endpoint as keyof typeof availableEndpoints;
 
   if (endpointIndex in availableEndpoints) {
-    const urlSearchParams = url.searchParams;
-    return await availableEndpoints[endpointIndex](version, urlSearchParams);
+    return await availableEndpoints[endpointIndex](version, searchParams);
   }
 
   console.error(`Unknown endpoint: ${endpoint}`);

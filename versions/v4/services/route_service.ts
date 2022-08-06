@@ -9,10 +9,10 @@ const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
 export async function getRoute(
   version: string,
-  urlSearchParams: URLSearchParams
+  searchParams: URLSearchParams
 ): Promise<Response> {
-  const userStopId = urlSearchParams.get("stopId") ?? null;
-  const userLineLabel = urlSearchParams.get("lineLabel") ?? null;
+  const userStopId = searchParams.get("stopId") ?? null;
+  const userLineLabel = searchParams.get("lineLabel") ?? null;
 
   // Log
   console.info(

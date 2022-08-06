@@ -17,10 +17,10 @@ export function checkConfiguration(): void {
 
 export async function getEstimations(
   version: string,
-  urlSearchParams: URLSearchParams
+  searchParams: URLSearchParams
 ): Promise<Response> {
-  const userStopId = urlSearchParams.get("stopId") ?? null;
-  const userLineLabel = urlSearchParams.get("lineLabel") ?? null;
+  const userStopId = searchParams.get("stopId") ?? null;
+  const userLineLabel = searchParams.get("lineLabel") ?? null;
 
   // Log
   console.info(

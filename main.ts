@@ -18,8 +18,11 @@ function checker(): void {
 
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
+  const pathname = url.pathname;
+  const searchParams = url.searchParams;
+
   const urlPattern = new URLPattern({ pathname: "/:version{/*}?" });
-  const urlPatternResult = urlPattern.exec(url);
+  const urlPatternResult = urlPattern.exec({ pathname });
   const version = urlPatternResult?.pathname.groups.version || null;
 
   if (version === null) {
@@ -32,7 +35,11 @@ async function handler(req: Request): Promise<Response> {
   if (VERSION_PATTERN.test(version)) {
     if (version in availableVersions) {
       const versionIndex = version as keyof typeof availableVersions;
-      return await availableVersions[versionIndex].handler(url);
+
+      return await availableVersions[versionIndex].handler(
+        pathname,
+        searchParams
+      );
     } else {
       console.warn(`Unknown version: ${version}`);
 

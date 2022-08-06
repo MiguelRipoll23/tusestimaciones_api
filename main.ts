@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.141.0/http/server.ts";
+import { serve } from "./deps.ts";
 
 // Versions
 import v4 from "./versions/v4/mod.ts";

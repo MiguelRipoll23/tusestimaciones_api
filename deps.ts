@@ -3,5 +3,5 @@ export type {
   node,
 } from "https://deno.land/x/xml@2.0.4/utils/types.ts";
 
-export { serve } from "https://deno.land/std@0.141.0/http/server.ts";
+export { serve } from "https://deno.land/std@0.151.0/http/server.ts";
 export { parse } from "https://deno.land/x/xml@2.0.4/mod.ts";

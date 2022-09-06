@@ -15,6 +15,6 @@ for item in resources:
 
 new_data = json.dumps(new_data, separators=(',', ':'))
 
-file1 = open('../../functions/src/json/lines.min.json', 'w+')
+file1 = open('../versions/v4/data/lines.min.json', 'w+')
 file1.write(new_data)
 file1.close()

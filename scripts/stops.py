@@ -49,6 +49,6 @@ new_data[0].append('Parada de test')
 
 new_data = json.dumps(new_data, separators=(',', ':'))
 
-file1 = open('../../../tusestimaciones-web/src/json/stops.min.json', 'w+')
+file1 = open('..//versions/v4/data/stops.min.json', 'w+')
 file1.write(new_data)
 file1.close()

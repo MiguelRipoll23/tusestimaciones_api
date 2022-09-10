@@ -24,7 +24,6 @@ async function handleRequest(
 
   if (endpoint === null) {
     return Response.json({
-      emoji: "🦖",
       endpoints: Object.keys(availableEndpoints),
     });
   }
@@ -39,7 +38,6 @@ async function handleRequest(
 
   return Response.json(
     {
-      emoji: "☄️",
       message: MESSAGE_ENDPOINT_NOT_FOUND,
     },
     { status: 404 }

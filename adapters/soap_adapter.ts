@@ -12,7 +12,7 @@ function checkConfiguration() {
 
   if (estimationsWebServiceUrl === undefined) {
     throw new Error(
-      "Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL
+      "Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL,
     );
   }
 
@@ -21,13 +21,12 @@ function checkConfiguration() {
 
 async function getEstimationsData(
   stopId: number,
-  userLineLabel: string | null
+  userLineLabel: string | null,
 ): Promise<LineEstimations[]> {
   const lineLabel = userLineLabel ?? "*";
   const lineEstimations: LineEstimations[] = [];
 
-  const body =
-    '<?xml version="1.0" encoding="utf-8"?>' +
+  const body = '<?xml version="1.0" encoding="utf-8"?>' +
     `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <soap:Body>
         <GetPasoParada xmlns="http://tempuri.org/">
@@ -52,7 +51,7 @@ async function getEstimationsData(
     estimationsWebServiceUrl === null
   ) {
     console.error(
-      "Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL
+      "Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL,
     );
     return lineEstimations;
   }

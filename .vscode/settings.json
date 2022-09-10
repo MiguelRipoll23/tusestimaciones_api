@@ -1,10 +1,10 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "deno.enable": true,
-  "cSpell.words": ["denoland", "tusestimaciones"],
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "cSpell.words": [
+    "denoland",
+    "tusestimaciones"
+  ],
+  "editor.defaultFormatter": "denoland.vscode-deno"
 }

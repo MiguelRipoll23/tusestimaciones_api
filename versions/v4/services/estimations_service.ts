@@ -17,7 +17,7 @@ export function checkConfiguration(): void {
 
 export async function getEstimations(
   version: string,
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
 ): Promise<Response> {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
@@ -26,7 +26,7 @@ export async function getEstimations(
   console.info(
     `${version}.` +
       "estimations_service." +
-      `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`
+      `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`,
   );
 
   return await validateRequest(userStopId, userLineLabel);
@@ -34,11 +34,11 @@ export async function getEstimations(
 
 async function validateRequest(
   userStopId: string | null,
-  userLineLabel: string | null
+  userLineLabel: string | null,
 ): Promise<Response> {
   const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
     userStopId,
-    userLineLabel
+    userLineLabel,
   );
 
   if (invalid) {
@@ -48,7 +48,7 @@ async function validateRequest(
       {
         message: validationMessage,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -64,7 +64,7 @@ interface ValidationResult {
 
 function geValidationResult(
   userStopId: string | null,
-  userLineLabel: string | null
+  userLineLabel: string | null,
 ): ValidationResult {
   const result: ValidationResult = {
     invalid: true,
@@ -103,7 +103,7 @@ function geValidationResult(
 
 async function prepareResponse(
   stopId: number,
-  userLineLabel: string | null
+  userLineLabel: string | null,
 ): Promise<Response> {
   const response: StopEstimations = [[], []];
 
@@ -119,7 +119,7 @@ async function prepareResponse(
       // Add available stops for a line
       response[1] = getNextStopsForLineByStopIdAndLineLabel(
         stopId,
-        userLineLabel
+        userLineLabel,
       );
     }
   }

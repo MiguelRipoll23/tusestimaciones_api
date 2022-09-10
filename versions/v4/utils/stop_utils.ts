@@ -1,5 +1,7 @@
 import lines from "./../data/lines.min.json" assert { type: "json" };
-import routeLines from "./../data/routes-lines.min.json" assert { type: "json" };
+import routeLines from "./../data/routes-lines.min.json" assert {
+  type: "json",
+};
 
 export function getLinesByStopId(stopId: number) {
   if (stopId === 0) {

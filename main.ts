@@ -27,7 +27,6 @@ async function handleRequest(req: Request): Promise<Response> {
 
   if (version === null) {
     return Response.json({
-      emoji: "🦕",
       versions: Object.keys(availableVersions),
     });
   }
@@ -45,7 +44,6 @@ async function handleRequest(req: Request): Promise<Response> {
 
       return Response.json(
         {
-          emoji: "☄️",
           message: MESSAGE_VERSION_NOT_FOUND,
         },
         { status: 404 }
@@ -55,7 +53,6 @@ async function handleRequest(req: Request): Promise<Response> {
 
   return Response.json(
     {
-      emoji: "☄️",
       message: MESSAGE_NOT_FOUND,
     },
     { status: 404 }

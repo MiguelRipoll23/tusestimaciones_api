@@ -38,7 +38,6 @@ async function validateRequest(
 
     return Response.json(
       {
-        emoji: "🙄",
         message: validationMessage,
       },
       { status: 400 }

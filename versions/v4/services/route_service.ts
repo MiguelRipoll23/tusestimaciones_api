@@ -9,7 +9,7 @@ const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
 export async function getRoute(
   version: string,
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
 ): Promise<Response> {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
@@ -18,7 +18,7 @@ export async function getRoute(
   console.info(
     `${version}.` +
       "route_service." +
-      `getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`
+      `getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`,
   );
 
   return await validateRequest(userStopId, userLineLabel);
@@ -26,11 +26,11 @@ export async function getRoute(
 
 async function validateRequest(
   userStopId: string | null,
-  userLineLabel: string | null
+  userLineLabel: string | null,
 ): Promise<Response> {
   const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
     userStopId,
-    userLineLabel
+    userLineLabel,
   );
 
   if (invalid) {
@@ -40,7 +40,7 @@ async function validateRequest(
       {
         message: validationMessage,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -56,7 +56,7 @@ interface ValidationResult {
 
 function geValidationResult(
   userStopId: string | null,
-  userLineLabel: string | null
+  userLineLabel: string | null,
 ): ValidationResult {
   const result: ValidationResult = {
     invalid: true,

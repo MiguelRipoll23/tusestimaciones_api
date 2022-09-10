@@ -14,7 +14,7 @@ function checkConfiguration(): void {
 
 async function handleRequest(
   pathname: string,
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
 ): Promise<Response> {
   const urlPattern = new URLPattern({ pathname: "/:version/:endpoint{/}?" });
   const urlPatternResult = urlPattern.exec({ pathname });
@@ -40,7 +40,7 @@ async function handleRequest(
     {
       message: MESSAGE_ENDPOINT_NOT_FOUND,
     },
-    { status: 404 }
+    { status: 404 },
   );
 }
 

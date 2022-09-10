@@ -37,7 +37,7 @@ async function handleRequest(req: Request): Promise<Response> {
 
       return await availableVersions[versionIndex].handleRequest(
         pathname,
-        searchParams
+        searchParams,
       );
     } else {
       console.warn(`Unknown version: ${version}`);
@@ -46,7 +46,7 @@ async function handleRequest(req: Request): Promise<Response> {
         {
           message: MESSAGE_VERSION_NOT_FOUND,
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
   }
@@ -55,7 +55,7 @@ async function handleRequest(req: Request): Promise<Response> {
     {
       message: MESSAGE_NOT_FOUND,
     },
-    { status: 404 }
+    { status: 404 },
   );
 }
 

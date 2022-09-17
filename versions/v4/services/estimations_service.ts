@@ -110,7 +110,7 @@ async function prepareResponse(
   userLineLabel: string | null,
   isUpdate: boolean,
 ): Promise<Response> {
-  const response: StopEstimations = [[], []];
+  const response: StopEstimations = [[]];
 
   // Data
   response[0] = await Adapter.getEstimationsData(stopId, userLineLabel);

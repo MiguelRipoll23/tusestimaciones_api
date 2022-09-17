@@ -21,20 +21,22 @@ export async function getEstimations(
 ): Promise<Response> {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
+  const userUpdate = searchParams.get("update") ?? "false";
 
   // Log
   console.info(
     `${version}.` +
       "estimations_service." +
-      `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel})`,
+      `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel},update:${userUpdate})`,
   );
 
-  return await validateRequest(userStopId, userLineLabel);
+  return await validateRequest(userStopId, userLineLabel, userUpdate);
 }
 
 async function validateRequest(
   userStopId: string | null,
   userLineLabel: string | null,
+  userUpdate: string,
 ): Promise<Response> {
   const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
     userStopId,
@@ -52,7 +54,9 @@ async function validateRequest(
     );
   }
 
-  return await prepareResponse(stopId, lineLabel);
+  const isUpdate = userUpdate === "true" ? true : false;
+
+  return await prepareResponse(stopId, lineLabel, isUpdate);
 }
 
 interface ValidationResult {
@@ -104,6 +108,7 @@ function geValidationResult(
 async function prepareResponse(
   stopId: number,
   userLineLabel: string | null,
+  isUpdate: boolean,
 ): Promise<Response> {
   const response: StopEstimations = [[], []];
 
@@ -111,7 +116,7 @@ async function prepareResponse(
   response[0] = await Adapter.getEstimationsData(stopId, userLineLabel);
 
   // Additional data
-  if (response[0].length > 0) {
+  if (isUpdate === false && response[0].length > 0) {
     if (userLineLabel === null) {
       // Add available lines for a stop
       response[1] = getLinesByStopId(stopId);

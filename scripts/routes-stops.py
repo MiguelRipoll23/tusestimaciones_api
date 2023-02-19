@@ -38,6 +38,6 @@ for line_label in new_data:
 
 new_data = json.dumps(new_data, separators=(',', ':'))
 
-file1 = open('../versions/v4/data/routes-stops.min.json', 'w+')
-file1.write(new_data)
-file1.close()
+data_file = open('../versions/v4/data/routes-stops.min.json', 'w+')
+data_file.write(new_data)
+data_file.close()

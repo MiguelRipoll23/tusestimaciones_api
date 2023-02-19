@@ -14,6 +14,7 @@ for item in resources:
   longitude = float(item['wgs84_pos:long'])
 
   new_data[stop_id] = []
+  new_data[stop_id].append(stop_id)
   new_data[stop_id].append(latitude)
   new_data[stop_id].append(longitude)
 
@@ -42,13 +43,8 @@ for item in resources:
 
   new_data[stop_id].append(stop_name)
 
-new_data[0] = []
-new_data[0].append(0)
-new_data[0].append(0)
-new_data[0].append('Parada de test')
-
 new_data = json.dumps(new_data, separators=(',', ':'))
 
-file1 = open('..//versions/v4/data/stops.min.json', 'w+')
-file1.write(new_data)
-file1.close()
+data_file = open('../versions/v4/data/stops.min.json', 'w+')
+data_file.write(new_data)
+data_file.close()

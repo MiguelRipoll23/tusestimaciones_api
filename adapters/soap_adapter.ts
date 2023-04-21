@@ -43,7 +43,7 @@ async function getEstimationsData(
       "Content-Type": "text/xml; charset=utf-8",
       SOAPAction: "http://tempuri.org/GetPasoParada",
     },
-    body: body,
+    body,
   };
 
   if (
@@ -98,8 +98,8 @@ function parseDocument(document: document, lineEstimations: LineEstimations[]) {
 
   for (let i = soapItems.length - 1; i >= 0; i--) {
     const soapItemNode = soapItems[i] as node;
-    const lineLabelNode = soapItemNode["linea"] as string;
-    const lineDestinationNode = soapItemNode["ruta"] as string;
+    const lineLabelNode = soapItemNode["linea"] as node;
+    const lineDestination = soapItemNode["ruta"] as string;
     const lineEstimation1Node = soapItemNode["e1"] as node;
     const lineEstimation2Node = soapItemNode["e2"] as node;
 
@@ -116,7 +116,7 @@ function parseDocument(document: document, lineEstimations: LineEstimations[]) {
 
     const result: LineEstimations = [
       lineLabel,
-      lineDestinationNode,
+      lineDestination,
       lineMinutes1,
       lineMinutes2,
     ];

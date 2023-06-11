@@ -19,7 +19,7 @@
     "lint": "deno lint"
   },
   "imports": {
-    "std/http/": "https://deno.land/std@0.184.0/http/",
+    "std/http/": "https://deno.land/std@0.191.0/http/",
     "xml/": "https://deno.land/x/xml@2.1.1/",
     "xml/utils/": "https://deno.land/x/xml@2.1.1/utils/"
   }

@@ -2,6 +2,8 @@ name: Review code
 
 on:
   push:
+    branches:
+      - production
     paths-ignore:
       - "**.md"
   pull_request:

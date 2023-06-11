@@ -1,4 +1,5 @@
-import { document, node, parse } from "../deps.ts";
+import { document, node } from "xml/utils/types.ts";
+import { parse } from "xml/mod.ts";
 import { LineEstimations } from "../versions/v4/interfaces/line_estimations_interface.ts";
 
 // Constants

@@ -1,0 +1,35 @@
+name: Review code
+
+on:
+  push:
+    branches:
+      - production
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - "**.md"
+
+jobs:
+  review-code:
+    name: Review code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup deno
+        uses: denoland/setup-deno@v1
+
+      - name: Lint code
+        run: |
+          deno lint
+
+      - name: Format code
+        run: |
+          deno fmt --check
+
+      - name: Check types
+        run: |
+          deno check main.ts

@@ -1,0 +1,31 @@
+name: udd-update-dependencies
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 */2 * *"
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup deno
+        uses: denoland/setup-deno@v1
+
+      - name: Update dependencies
+        run: |
+          deno run -A https://deno.land/x/udd/main.ts deno.jsonc
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: update-dependencies
+          delete-branch: true
+          commit-message: "Update dependencies"
+          title: Update dependencies
+          body: >
+            Automated pull request triggered by a scheduled workflow.
+          reviewers: MiguelRipoll23

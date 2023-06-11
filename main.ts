@@ -1,4 +1,4 @@
-import { serve } from "./deps.ts";
+import { serve } from "std/http/server.ts";
 
 // Versions
 import v4 from "./versions/v4/mod.ts";

@@ -12,7 +12,7 @@
     "update": "udd .\\deno.jsonc"
   },
   "imports": {
-    "std/http/": "https://deno.land/std@0.192.0/http/",
+    "std/http/": "https://deno.land/std@0.193.0/http/",
     "xml/": "https://deno.land/x/xml@2.1.1/",
     "xml/utils/": "https://deno.land/x/xml@2.1.1/utils/"
   }

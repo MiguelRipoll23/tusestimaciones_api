@@ -55,4 +55,4 @@ async function handleRequest(req: Request): Promise<Response> {
   );
 }
 
-Deno.serve({ port: 8080, hostname: "127.0.0.1" }, handleRequest);
+Deno.serve(handleRequest);

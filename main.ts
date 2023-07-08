@@ -1,5 +1,3 @@
-import { serve } from "std/http/server.ts";
-
 // Versions
 import v4 from "./versions/v4/mod.ts";
 
@@ -9,11 +7,9 @@ const MESSAGE_NOT_FOUND = "Not found";
 
 const availableVersions = { v4 };
 
-function checkConfiguration(): void {
-  for (const version in availableVersions) {
-    const versionIndex = version as keyof typeof availableVersions;
-    availableVersions[versionIndex].checkConfiguration();
-  }
+for (const version in availableVersions) {
+  const versionIndex = version as keyof typeof availableVersions;
+  availableVersions[versionIndex].checkConfiguration();
 }
 
 async function handleRequest(req: Request): Promise<Response> {
@@ -59,5 +55,4 @@ async function handleRequest(req: Request): Promise<Response> {
   );
 }
 
-checkConfiguration();
-serve(handleRequest);
+Deno.serve(handleRequest);

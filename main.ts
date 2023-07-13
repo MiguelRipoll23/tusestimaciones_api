@@ -1,15 +1,11 @@
 // Versions
 import v4 from "./versions/v4/mod.ts";
 
-const VERSION_PATTERN = /v\d+/;
-const MESSAGE_VERSION_NOT_FOUND = "Version not found";
-const MESSAGE_NOT_FOUND = "Not found";
+const versions = { v4 };
 
-const availableVersions = { v4 };
-
-for (const version in availableVersions) {
-  const versionIndex = version as keyof typeof availableVersions;
-  availableVersions[versionIndex].checkConfiguration();
+for (const version in versions) {
+  const versionIndex = version as keyof typeof versions;
+  versions[versionIndex].checkConfiguration();
 }
 
 async function handleRequest(req: Request): Promise<Response> {
@@ -23,33 +19,24 @@ async function handleRequest(req: Request): Promise<Response> {
 
   if (version === null) {
     return Response.json({
-      versions: Object.keys(availableVersions),
+      versions: Object.keys(versions),
     });
   }
 
-  if (VERSION_PATTERN.test(version)) {
-    if (version in availableVersions) {
-      const versionIndex = version as keyof typeof availableVersions;
+  if (version in versions) {
+    const versionIndex = version as keyof typeof versions;
 
-      return await availableVersions[versionIndex].handleRequest(
-        pathname,
-        searchParams,
-      );
-    } else {
-      console.warn(`Unknown version: ${version}`);
-
-      return Response.json(
-        {
-          message: MESSAGE_VERSION_NOT_FOUND,
-        },
-        { status: 404 },
-      );
-    }
+    return await versions[versionIndex].handleRequest(
+      pathname,
+      searchParams,
+    );
   }
+
+  console.warn("Not found: " + version);
 
   return Response.json(
     {
-      message: MESSAGE_NOT_FOUND,
+      message: "Not found",
     },
     { status: 404 },
   );

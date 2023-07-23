@@ -47,17 +47,7 @@ async function getEstimationsData(
     body,
   };
 
-  if (
-    estimationsWebServiceUrl === undefined ||
-    estimationsWebServiceUrl === null
-  ) {
-    console.error(
-      "Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL,
-    );
-    return lineEstimations;
-  }
-
-  await fetch(estimationsWebServiceUrl, options)
+  await fetch(estimationsWebServiceUrl as string, options)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Status code (" + response.status + ")");

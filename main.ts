@@ -1,5 +1,5 @@
 // Versions
-import v4 from "./versions/v4/mod.ts";
+import v4 from "./versions/v4/v4.ts";
 
 const versions = { v4 };
 

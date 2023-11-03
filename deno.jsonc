@@ -12,6 +12,6 @@
     "update": "udd .\\deno.jsonc"
   },
   "imports": {
-    "xml/": "https://deno.land/x/xml@2.1.2/"
+    "xml/": "https://deno.land/x/xml@2.1.3/"
   }
 }

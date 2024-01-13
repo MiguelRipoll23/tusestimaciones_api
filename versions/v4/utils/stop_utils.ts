@@ -1,5 +1,5 @@
-import lines from "./../data/lines.min.json" assert { type: "json" };
-import routeLines from "./../data/routes-lines.min.json" assert {
+import lines from "./../data/lines.min.json" with { type: "json" };
+import routeLines from "./../data/routes-lines.min.json" with {
   type: "json",
 };
 

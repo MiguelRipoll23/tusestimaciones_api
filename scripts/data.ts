@@ -5,7 +5,7 @@ await updateLineRoutes();
 
 async function updateStops(): Promise<void> {
   const response = await fetch(
-    "http://datos.santander.es/api/rest/datasets/paradas_bus.json?items=3000&sort=asc"
+    "http://datos.santander.es/api/rest/datasets/paradas_bus.json?items=3000&sort=asc",
   );
 
   const data = await response.json();
@@ -52,7 +52,7 @@ async function updateStops(): Promise<void> {
   await Deno.writeTextFile("versions/v4/data/stops.min.json", updatedData);
   await Deno.writeTextFile(
     "../tusestimaciones-web/src/json/stops.min.json",
-    updatedData
+    updatedData,
   );
 
   console.log("Stops updated");
@@ -60,7 +60,7 @@ async function updateStops(): Promise<void> {
 
 async function updateLines(): Promise<void> {
   const response = await fetch(
-    "http://datos.santander.es/api/rest/datasets/lineas_bus.json?items=3000&sort=asc"
+    "http://datos.santander.es/api/rest/datasets/lineas_bus.json?items=3000&sort=asc",
   );
 
   const data = await response.json();
@@ -82,7 +82,7 @@ async function updateLines(): Promise<void> {
 
 async function updateStopRoutes(): Promise<void> {
   const response = await fetch(
-    "http://datos.santander.es/api/rest/datasets/lineas_bus_secuencia.json?items=3000&sort=asc"
+    "http://datos.santander.es/api/rest/datasets/lineas_bus_secuencia.json?items=3000&sort=asc",
   );
 
   const data = await response.json();
@@ -127,7 +127,7 @@ async function updateStopRoutes(): Promise<void> {
   const updatedData: string = JSON.stringify(updatedDataList);
   await Deno.writeTextFile(
     "versions/v4/data/routes-stops.min.json",
-    updatedData
+    updatedData,
   );
 
   console.log("Stop routes updated");
@@ -135,7 +135,7 @@ async function updateStopRoutes(): Promise<void> {
 
 async function updateLineRoutes(): Promise<void> {
   const response = await fetch(
-    "http://datos.santander.es/api/rest/datasets/lineas_bus_secuencia.json?items=3000&sort=asc"
+    "http://datos.santander.es/api/rest/datasets/lineas_bus_secuencia.json?items=3000&sort=asc",
   );
   const data = await response.json();
 
@@ -164,7 +164,7 @@ async function updateLineRoutes(): Promise<void> {
   const updatedData = JSON.stringify(updatedDataList);
   await Deno.writeTextFile(
     "versions/v4/data/routes-lines.min.json",
-    updatedData
+    updatedData,
   );
 
   console.log("Line routes updated");

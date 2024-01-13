@@ -1,8 +1,8 @@
 import { StopRoute } from "../interfaces/stop_route_interface.ts";
-import routeLines from "./../data/routes-lines.min.json" assert {
+import routeLines from "./../data/routes-lines.min.json" with {
   type: "json",
 };
-import routeStops from "./../data/routes-stops.min.json" assert {
+import routeStops from "./../data/routes-stops.min.json" with {
   type: "json",
 };
 

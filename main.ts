@@ -8,10 +8,13 @@ for (const version in versions) {
   versions[versionIndex].checkConfiguration();
 }
 
-async function handleRequest(req: Request): Promise<Response> {
-  const url = new URL(req.url);
+async function handleRequest(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const userAgent = request.headers.get("user-agent");
   const pathname = url.pathname;
   const searchParams = url.searchParams;
+
+  console.debug("Request", userAgent, pathname, searchParams.toString());
 
   const urlPattern = new URLPattern({ pathname: "/:version{/*}?" });
   const urlPatternResult = urlPattern.exec({ pathname });
@@ -26,10 +29,7 @@ async function handleRequest(req: Request): Promise<Response> {
   if (version in versions) {
     const versionIndex = version as keyof typeof versions;
 
-    return await versions[versionIndex].handleRequest(
-      pathname,
-      searchParams,
-    );
+    return await versions[versionIndex].handleRequest(pathname, searchParams);
   }
 
   console.warn("Not found: " + version);
@@ -38,7 +38,7 @@ async function handleRequest(req: Request): Promise<Response> {
     {
       message: "Not found",
     },
-    { status: 404 },
+    { status: 404 }
   );
 }
 

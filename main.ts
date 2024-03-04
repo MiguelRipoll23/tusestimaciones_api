@@ -14,7 +14,7 @@ async function handleRequest(request: Request): Promise<Response> {
   const pathname = url.pathname;
   const searchParams = url.searchParams;
 
-  console.debug(userAgent, pathname, searchParams.toString());
+  console.info(userAgent, pathname, searchParams.toString());
 
   const urlPattern = new URLPattern({ pathname: "/:version{/*}?" });
   const urlPatternResult = urlPattern.exec({ pathname });

@@ -14,13 +14,6 @@ export async function getRoute(
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
 
-  // Log
-  console.info(
-    `${version}.` +
-      "route_service." +
-      `getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`,
-  );
-
   return await validateRequest(userStopId, userLineLabel);
 }
 

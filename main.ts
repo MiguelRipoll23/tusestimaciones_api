@@ -14,7 +14,7 @@ async function handleRequest(request: Request): Promise<Response> {
   const pathname = url.pathname;
   const searchParams = url.searchParams;
 
-  console.debug("Request", userAgent, pathname, searchParams.toString());
+  console.debug(userAgent, pathname, searchParams.toString());
 
   const urlPattern = new URLPattern({ pathname: "/:version{/*}?" });
   const urlPatternResult = urlPattern.exec({ pathname });
@@ -38,7 +38,7 @@ async function handleRequest(request: Request): Promise<Response> {
     {
       message: "Not found",
     },
-    { status: 404 }
+    { status: 404 },
   );
 }
 

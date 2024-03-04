@@ -16,19 +16,11 @@ export function checkConfiguration(): void {
 }
 
 export async function getEstimations(
-  version: string,
   searchParams: URLSearchParams,
 ): Promise<Response> {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
   const userUpdate = searchParams.get("update") ?? "false";
-
-  // Log
-  console.info(
-    `${version}.` +
-      "estimations_service." +
-      `getEstimations(stopId:${userStopId},lineLabel:${userLineLabel},update:${userUpdate})`,
-  );
 
   return await validateRequest(userStopId, userLineLabel, userUpdate);
 }

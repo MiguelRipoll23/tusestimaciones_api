@@ -16,8 +16,6 @@ function checkConfiguration() {
       "Missing configuration variable: " + ENV_ESTIMATIONS_WEB_SERVICE_URL,
     );
   }
-
-  console.info("Estimations Web Service URL: " + estimationsWebServiceUrl);
 }
 
 async function getEstimationsData(

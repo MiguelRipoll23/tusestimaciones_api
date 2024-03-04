@@ -8,18 +8,10 @@ const MESSAGE_STOP_ID_INVALID = "stopId is invalid";
 const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
 export async function getRoute(
-  version: string,
   searchParams: URLSearchParams,
 ): Promise<Response> {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
-
-  // Log
-  console.info(
-    `${version}.` +
-      "route_service." +
-      `getRoute(stopId:${userStopId},lineLabel:${userLineLabel})`,
-  );
 
   return await validateRequest(userStopId, userLineLabel);
 }

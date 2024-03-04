@@ -8,7 +8,6 @@ const MESSAGE_STOP_ID_INVALID = "stopId is invalid";
 const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
 export async function getRoute(
-  version: string,
   searchParams: URLSearchParams,
 ): Promise<Response> {
   const userStopId = searchParams.get("stopId") ?? null;

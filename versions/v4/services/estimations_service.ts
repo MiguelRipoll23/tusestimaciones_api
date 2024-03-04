@@ -16,7 +16,6 @@ export function checkConfiguration(): void {
 }
 
 export async function getEstimations(
-  version: string,
   searchParams: URLSearchParams,
 ): Promise<Response> {
   const userStopId = searchParams.get("stopId") ?? null;

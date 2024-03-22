@@ -1,4 +1,4 @@
-import { StopRoute } from "../interfaces/stop_route_interface.ts";
+import { StopRoute } from "../interfaces/models/stop_route_interface.ts";
 import routeLines from "./../data/routes-lines.min.json" with {
   type: "json",
 };

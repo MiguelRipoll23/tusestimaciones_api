@@ -1,6 +1,6 @@
 import { document, node } from "xml/utils/types.ts";
 import { parse } from "xml/mod.ts";
-import { LineEstimations } from "../versions/v4/interfaces/line_estimations_interface.ts";
+import { LineEstimations } from "../versions/v4/interfaces/models/line_estimations_interface.ts";
 
 // Constants
 const ENV_ESTIMATIONS_WEB_SERVICE_URL = "ESTIMATIONS_WEB_SERVICE_URL";
@@ -8,7 +8,7 @@ const ENV_ESTIMATIONS_WEB_SERVICE_URL = "ESTIMATIONS_WEB_SERVICE_URL";
 // Variables
 let estimationsWebServiceUrl: string | null | undefined = null;
 
-function checkConfiguration() {
+function validateConfiguration() {
   estimationsWebServiceUrl = Deno.env.get(ENV_ESTIMATIONS_WEB_SERVICE_URL);
 
   if (estimationsWebServiceUrl === undefined) {
@@ -132,6 +132,6 @@ function parseDocument(document: document, lineEstimations: LineEstimations[]) {
 }
 
 export default {
-  checkConfiguration,
+  validateConfiguration,
   getEstimationsData,
 };

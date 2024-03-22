@@ -1,9 +1,12 @@
-import { StopEstimations } from "../interfaces/stop_estimations_interface.ts";
+import { StopEstimations } from "../interfaces/responses/stop_estimations_interface.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
 import { getNextStopsForLineByStopIdAndLineLabel } from "../utils/line_utils.ts";
-import { addAccessControlAllowOriginHeader } from "../utils/response_utils.ts";
-
+import {
+  addAccessControlAllowOriginHeader,
+  sendBadRequestResponse,
+} from "../utils/response_utils.ts";
 import SoapAdapter from "../../../adapters/soap_adapter.ts";
+import { EstimationsRequest } from "../interfaces/requests/estimations_request_interface.ts";
 
 const Adapter = SoapAdapter;
 
@@ -11,112 +14,72 @@ const MESSAGE_STOP_ID_REQUIRED = "stopId is required";
 const MESSAGE_STOP_ID_INVALID = "stopId is invalid";
 const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
-export function checkConfiguration(): void {
-  Adapter.checkConfiguration();
+export function validateConfiguration(): void {
+  Adapter.validateConfiguration();
 }
 
 export async function getEstimations(
   searchParams: URLSearchParams,
 ): Promise<Response> {
+  let request: EstimationsRequest | null;
+
+  try {
+    request = validateRequest(
+      searchParams,
+    );
+  } catch (error) {
+    return sendBadRequestResponse(error.message);
+  }
+
+  return await processRequest(request);
+}
+
+function validateRequest(
+  searchParams: URLSearchParams,
+): EstimationsRequest {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
   const userUpdate = searchParams.get("update") ?? "false";
 
-  return await validateRequest(userStopId, userLineLabel, userUpdate);
-}
-
-async function validateRequest(
-  userStopId: string | null,
-  userLineLabel: string | null,
-  userUpdate: string,
-): Promise<Response> {
-  const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
-    userStopId,
-    userLineLabel,
-  );
-
-  if (invalid) {
-    console.warn(`Invalid request: ${validationMessage}`);
-
-    return Response.json(
-      {
-        message: validationMessage,
-      },
-      { status: 400 },
-    );
-  }
-
-  const isUpdate = userUpdate === "true" ? true : false;
-
-  return await prepareResponse(stopId, lineLabel, isUpdate);
-}
-
-interface ValidationResult {
-  invalid: boolean;
-  validationMessage: string | null;
-  stopId: number;
-  lineLabel: string | null;
-}
-
-function geValidationResult(
-  userStopId: string | null,
-  userLineLabel: string | null,
-): ValidationResult {
-  const result: ValidationResult = {
-    invalid: true,
-    validationMessage: null,
-    stopId: 0,
-    lineLabel: null,
-  };
-
   if (userStopId === null) {
-    result.validationMessage = MESSAGE_STOP_ID_REQUIRED;
-    return result;
+    throw new Error(MESSAGE_STOP_ID_REQUIRED);
   }
 
   const stopId = parseInt(userStopId);
 
   if (isNaN(stopId)) {
-    result.validationMessage = MESSAGE_STOP_ID_INVALID;
-    return result;
+    throw new Error(MESSAGE_STOP_ID_INVALID);
   }
 
-  result.stopId = stopId;
-
-  if (userLineLabel !== null) {
-    if (userLineLabel.length === 0) {
-      result.validationMessage = MESSAGE_LINE_LABEL_REQUIRED;
-      return result;
-    }
-
-    result.lineLabel = userLineLabel;
+  if (userLineLabel !== null && userLineLabel.length === 0) {
+    throw new Error(MESSAGE_LINE_LABEL_REQUIRED);
   }
 
-  result.invalid = false;
+  const lineLabel = userLineLabel;
+  const update = userUpdate === "true";
 
-  return result;
+  return { stopId, lineLabel, update };
 }
 
-async function prepareResponse(
-  stopId: number,
-  userLineLabel: string | null,
-  isUpdate: boolean,
+async function processRequest(
+  request: EstimationsRequest,
 ): Promise<Response> {
+  const { stopId, lineLabel, update } = request;
   const response: StopEstimations = [[]];
 
   // Data
-  response[0] = await Adapter.getEstimationsData(stopId, userLineLabel);
+  response[0] = await Adapter.getEstimationsData(stopId, lineLabel);
 
   // Additional data
-  if (isUpdate === false && response[0].length > 0) {
-    if (userLineLabel === null) {
+  if (update === false && response[0].length > 0) {
+    if (lineLabel === null) {
       // Add available lines for a stop
       response[1] = getLinesByStopId(stopId);
     } else {
       // Add available stops for a line
       response[1] = getNextStopsForLineByStopIdAndLineLabel(
         stopId,
-        userLineLabel,
+        lineLabel,
       );
     }
   }
@@ -128,6 +91,6 @@ async function prepareResponse(
 }
 
 export default {
-  checkConfiguration,
+  validateConfiguration,
   getEstimations,
 };

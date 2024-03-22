@@ -8,13 +8,19 @@ for (const version in versions) {
   versions[versionIndex].checkConfiguration();
 }
 
-async function handleRequest(request: Request): Promise<Response> {
+async function handleRequest(
+  request: Request,
+  serverHandlerInfo: Deno.ServeHandlerInfo
+): Promise<Response> {
   const url = new URL(request.url);
   const userAgent = request.headers.get("user-agent");
   const pathname = url.pathname;
   const searchParams = url.searchParams;
 
-  console.info(userAgent, pathname, searchParams.toString());
+  const remoteAddress = serverHandlerInfo.remoteAddr;
+  const ipAddress = remoteAddress.hostname;
+
+  console.info(userAgent, pathname, searchParams.toString(), ipAddress);
 
   const urlPattern = new URLPattern({ pathname: "/:version{/*}?" });
   const urlPatternResult = urlPattern.exec({ pathname });
@@ -38,7 +44,7 @@ async function handleRequest(request: Request): Promise<Response> {
     {
       message: "Not found",
     },
-    { status: 404 },
+    { status: 404 }
   );
 }
 

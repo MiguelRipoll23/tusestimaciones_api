@@ -53,8 +53,10 @@ function validateRequest(
 }
 
 function processRequest(request: RouteRequest): Response {
-  const { stopId, lineLabel } = request;
   const response: LineRoute[] = [];
+
+  // Input
+  const { stopId, lineLabel } = request;
 
   // Route ID
   const routeId = getRouteId(stopId, lineLabel);

@@ -1,4 +1,5 @@
 // Versions
+import { sendNotFoundResponse } from "./versions/v4/utils/response_utils.ts";
 import v4 from "./versions/v4/v4.ts";
 
 const versions = { v4 };
@@ -38,14 +39,7 @@ async function handleRequest(
     return await versions[versionIndex].handleRequest(pathname, searchParams);
   }
 
-  console.warn("Not found: " + version);
-
-  return Response.json(
-    {
-      message: "Not found",
-    },
-    { status: 404 },
-  );
+  return sendNotFoundResponse(version);
 }
 
 Deno.serve(handleRequest);

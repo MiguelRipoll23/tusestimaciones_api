@@ -64,8 +64,10 @@ function validateRequest(
 async function processRequest(
   request: EstimationsRequest,
 ): Promise<Response> {
-  const { stopId, lineLabel, update } = request;
   const response: StopEstimations = [[]];
+
+  // Input
+  const { stopId, lineLabel, update } = request;
 
   // Data
   response[0] = await Adapter.getEstimationsData(stopId, lineLabel);

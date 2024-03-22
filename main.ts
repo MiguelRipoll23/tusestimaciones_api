@@ -5,7 +5,7 @@ const versions = { v4 };
 
 for (const version in versions) {
   const versionIndex = version as keyof typeof versions;
-  versions[versionIndex].checkConfiguration();
+  versions[versionIndex].validateConfiguration();
 }
 
 async function handleRequest(

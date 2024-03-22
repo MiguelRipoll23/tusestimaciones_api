@@ -8,8 +8,8 @@ const availableEndpoints = {
   route: RouteService.getRoute,
 };
 
-function checkConfiguration(): void {
-  EstimationsService.checkConfiguration();
+function validateConfiguration(): void {
+  EstimationsService.validateConfiguration();
 }
 
 async function handleRequest(
@@ -43,6 +43,6 @@ async function handleRequest(
 }
 
 export default {
-  checkConfiguration,
+  validateConfiguration,
   handleRequest,
 };

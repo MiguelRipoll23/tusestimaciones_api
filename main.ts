@@ -10,7 +10,7 @@ for (const version in versions) {
 
 async function handleRequest(
   request: Request,
-  serverHandlerInfo: Deno.ServeHandlerInfo
+  serverHandlerInfo: Deno.ServeHandlerInfo,
 ): Promise<Response> {
   const url = new URL(request.url);
   const userAgent = request.headers.get("user-agent");
@@ -44,7 +44,7 @@ async function handleRequest(
     {
       message: "Not found",
     },
-    { status: 404 }
+    { status: 404 },
   );
 }
 

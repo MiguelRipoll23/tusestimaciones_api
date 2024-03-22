@@ -7,7 +7,7 @@
   },
   "tasks": {
     "dev": "deno run --allow-env --allow-net --watch main.ts",
-    "lint": "deno fmt && lint",
+    "lint": "deno fmt && deno lint",
     "data": "deno run -A scripts/data.ts",
     "update": "udd .\\deno.jsonc"
   },

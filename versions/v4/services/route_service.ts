@@ -1,90 +1,59 @@
 import { LineRoute } from "../interfaces/responses/line_route_interface.ts";
 import { getRouteId, getStopsByRouteId } from "../utils/line_utils.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
-import { addAccessControlAllowOriginHeader } from "../utils/response_utils.ts";
+import {
+  addAccessControlAllowOriginHeader,
+  sendBadRequestResponse,
+} from "../utils/response_utils.ts";
+import { RouteRequest } from "../interfaces/requests/route_request_interface.ts";
 
 const MESSAGE_STOP_ID_REQUIRED = "stopId is required";
 const MESSAGE_STOP_ID_INVALID = "stopId is invalid";
 const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
-export async function getRoute(
+export function getRoute(
   searchParams: URLSearchParams,
-): Promise<Response> {
+): Response {
+  let request: RouteRequest | null;
+
+  try {
+    request = validateRequest(
+      searchParams,
+    );
+  } catch (error) {
+    return sendBadRequestResponse(error.message);
+  }
+
+  return processRequest(request);
+}
+
+function validateRequest(
+  searchParams: URLSearchParams,
+): RouteRequest {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
 
-  return await validateRequest(userStopId, userLineLabel);
-}
-
-async function validateRequest(
-  userStopId: string | null,
-  userLineLabel: string | null,
-): Promise<Response> {
-  const { invalid, validationMessage, stopId, lineLabel } = geValidationResult(
-    userStopId,
-    userLineLabel,
-  );
-
-  if (invalid) {
-    console.warn(`Invalid request: ${validationMessage}`);
-
-    return Response.json(
-      {
-        message: validationMessage,
-      },
-      { status: 400 },
-    );
-  }
-
-  return await prepareResponse(stopId, lineLabel);
-}
-
-interface ValidationResult {
-  invalid: boolean;
-  validationMessage: string | null;
-  stopId: number;
-  lineLabel: string;
-}
-
-function geValidationResult(
-  userStopId: string | null,
-  userLineLabel: string | null,
-): ValidationResult {
-  const result: ValidationResult = {
-    invalid: true,
-    validationMessage: null,
-    stopId: 0,
-    lineLabel: "",
-  };
-
   if (userStopId === null) {
-    result.validationMessage = MESSAGE_STOP_ID_REQUIRED;
-    return result;
+    throw new Error(MESSAGE_STOP_ID_REQUIRED);
   }
 
   const stopId = parseInt(userStopId);
 
   if (isNaN(stopId)) {
-    result.validationMessage = MESSAGE_STOP_ID_INVALID;
-    return result;
+    throw new Error(MESSAGE_STOP_ID_INVALID);
   }
 
-  result.stopId = stopId;
-
-  if (userLineLabel === null) {
-    result.validationMessage = MESSAGE_LINE_LABEL_REQUIRED;
-    return result;
+  if (userLineLabel === null || userLineLabel.length === 0) {
+    throw new Error(MESSAGE_LINE_LABEL_REQUIRED);
   }
 
-  result.lineLabel = userLineLabel;
+  const lineLabel = userLineLabel;
 
-  // Validated
-  result.invalid = false;
-
-  return result;
+  return { stopId, lineLabel };
 }
 
-function prepareResponse(stopId: number, lineLabel: string): Response {
+function processRequest(request: RouteRequest): Response {
+  const { stopId, lineLabel } = request;
   const response: LineRoute[] = [];
 
   // Route ID

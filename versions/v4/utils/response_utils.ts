@@ -8,6 +8,19 @@ export function addAccessControlAllowOriginHeader(headers: Headers) {
   );
 }
 
+export function sendNotFoundResponse(
+  path: string,
+): Response {
+  console.warn("Not found: " + path);
+
+  return Response.json(
+    {
+      message: "Not found",
+    },
+    { status: 404 },
+  );
+}
+
 export function sendBadRequestResponse(message: string): Response {
   console.warn(`Invalid request: ${message}`);
 

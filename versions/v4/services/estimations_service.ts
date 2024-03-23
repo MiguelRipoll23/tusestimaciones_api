@@ -24,9 +24,7 @@ export async function getEstimations(
   let request: EstimationsRequest | null;
 
   try {
-    request = validateRequest(
-      searchParams,
-    );
+    request = validateRequest(searchParams);
   } catch (error) {
     return sendBadRequestResponse(error.message);
   }
@@ -34,9 +32,7 @@ export async function getEstimations(
   return await processRequest(request);
 }
 
-function validateRequest(
-  searchParams: URLSearchParams,
-): EstimationsRequest {
+function validateRequest(searchParams: URLSearchParams): EstimationsRequest {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
   const userUpdate = searchParams.get("update") ?? "false";
@@ -55,15 +51,14 @@ function validateRequest(
     throw new Error(MESSAGE_LINE_LABEL_REQUIRED);
   }
 
-  const lineLabel = userLineLabel;
-  const update = userUpdate === "true";
-
-  return { stopId, lineLabel, update };
+  return {
+    stopId,
+    lineLabel: userLineLabel,
+    update: userUpdate === "true",
+  };
 }
 
-async function processRequest(
-  request: EstimationsRequest,
-): Promise<Response> {
+async function processRequest(request: EstimationsRequest): Promise<Response> {
   const response: StopEstimations = [[]];
 
   // Input
@@ -79,10 +74,7 @@ async function processRequest(
       response[1] = getLinesByStopId(stopId);
     } else {
       // Add available stops for a line
-      response[1] = getNextStopsForLineByStopIdAndLineLabel(
-        stopId,
-        lineLabel,
-      );
+      response[1] = getNextStopsForLineByStopIdAndLineLabel(stopId, lineLabel);
     }
   }
 

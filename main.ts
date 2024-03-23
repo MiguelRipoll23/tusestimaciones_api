@@ -21,7 +21,7 @@ async function handleRequest(
   const remoteAddress = serverHandlerInfo.remoteAddr;
   const ipAddress = remoteAddress.hostname;
 
-  console.info(userAgent, pathname, searchParams.toString(), ipAddress);
+  console.info(ipAddress, userAgent, pathname, searchParams.toString());
 
   const urlPattern = new URLPattern({ pathname: "/:version{/*}?" });
   const urlPatternResult = urlPattern.exec({ pathname });

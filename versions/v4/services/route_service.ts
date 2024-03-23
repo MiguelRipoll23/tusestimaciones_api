@@ -11,15 +11,11 @@ const MESSAGE_STOP_ID_REQUIRED = "stopId is required";
 const MESSAGE_STOP_ID_INVALID = "stopId is invalid";
 const MESSAGE_LINE_LABEL_REQUIRED = "lineLabel is required";
 
-export function getRoute(
-  searchParams: URLSearchParams,
-): Response {
+export function getRoute(searchParams: URLSearchParams): Response {
   let request: RouteRequest | null;
 
   try {
-    request = validateRequest(
-      searchParams,
-    );
+    request = validateRequest(searchParams);
   } catch (error) {
     return sendBadRequestResponse(error.message);
   }
@@ -27,9 +23,7 @@ export function getRoute(
   return processRequest(request);
 }
 
-function validateRequest(
-  searchParams: URLSearchParams,
-): RouteRequest {
+function validateRequest(searchParams: URLSearchParams): RouteRequest {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
 
@@ -47,9 +41,10 @@ function validateRequest(
     throw new Error(MESSAGE_LINE_LABEL_REQUIRED);
   }
 
-  const lineLabel = userLineLabel;
-
-  return { stopId, lineLabel };
+  return {
+    stopId,
+    lineLabel: userLineLabel,
+  };
 }
 
 function processRequest(request: RouteRequest): Response {

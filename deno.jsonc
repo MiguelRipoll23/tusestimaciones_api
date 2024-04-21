@@ -12,6 +12,6 @@
     "update": "udd .\\deno.jsonc"
   },
   "imports": {
-    "xml/": "https://deno.land/x/xml@3.0.0/"
+    "@lowlighter/xml": "jsr:@lowlighter/xml@^3.0.1"
   }
 }

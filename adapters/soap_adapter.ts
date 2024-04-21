@@ -1,5 +1,5 @@
-import { document, node } from "xml/utils/types.ts";
-import { parse } from "xml/mod.ts";
+import { document, node } from "@lowlighter/xml/types";
+import { parse } from "@lowlighter/xml";
 import { LineEstimations } from "../versions/v4/interfaces/models/line_estimations_interface.ts";
 
 // Constants

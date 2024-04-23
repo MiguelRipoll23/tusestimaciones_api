@@ -54,7 +54,7 @@ async function getEstimationsData(
       return response.text();
     })
     .then((text) => {
-      return parse(text, { flatten: true });
+      return parse(text, { flatten: true, reviveNumbers: true });
     })
     .then((document) => {
       parseDocument(document, lineEstimations);

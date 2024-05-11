@@ -2,12 +2,12 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "jsr:@lowlighter/xml@^4.0.0": "jsr:@lowlighter/xml@4.0.0",
+      "jsr:@lowlighter/xml@^4.0.1": "jsr:@lowlighter/xml@4.0.1",
       "npm:superjson@1.13.3": "npm:superjson@1.13.3"
     },
     "jsr": {
-      "@lowlighter/xml@4.0.0": {
-        "integrity": "325e84ecabc35c3299fdfd47d00968eb258db453217c35be94c00281008ea069"
+      "@lowlighter/xml@4.0.1": {
+        "integrity": "91fec6ea3c2479187148d4ac9de1ab3b92859b9ce96f6df1b1f1a40c6dcf9281"
       }
     },
     "npm": {
@@ -88,7 +88,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@lowlighter/xml@^4.0.0"
+      "jsr:@lowlighter/xml@^4.0.1"
     ]
   }
 }

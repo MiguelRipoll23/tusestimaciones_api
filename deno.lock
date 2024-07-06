@@ -2,12 +2,19 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "jsr:@lowlighter/xml@^4.0.1": "jsr:@lowlighter/xml@4.0.1",
+      "jsr:@libs/typing@2": "jsr:@libs/typing@2.6.0",
+      "jsr:@libs/xml@^5.4.9": "jsr:@libs/xml@5.4.9",
       "npm:superjson@1.13.3": "npm:superjson@1.13.3"
     },
     "jsr": {
-      "@lowlighter/xml@4.0.1": {
-        "integrity": "91fec6ea3c2479187148d4ac9de1ab3b92859b9ce96f6df1b1f1a40c6dcf9281"
+      "@libs/typing@2.6.0": {
+        "integrity": "07a1ee52fa6d769d68d95d7310bac7dd608932c91760a0bc8a95ce6de3630603"
+      },
+      "@libs/xml@5.4.9": {
+        "integrity": "6ec7bda203c74d0e8151bbb994b7fd54a1910a630794cd64c2ebcb6b378fb996",
+        "dependencies": [
+          "jsr:@libs/typing@2"
+        ]
       }
     },
     "npm": {
@@ -88,7 +95,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@lowlighter/xml@^4.0.1"
+      "jsr:@libs/xml@^5.4.9"
     ]
   }
 }

@@ -6,11 +6,11 @@
     "exclude": [".git/", "versions/v4/data/"]
   },
   "tasks": {
-    "dev": "deno run --env --allow-net --watch main.ts",
+    "dev": "deno run --allow-env --allow-net --watch main.ts",
     "lint": "deno fmt && deno lint",
     "data": "deno run --allow-net --allow-write scripts/data.ts"
   },
   "imports": {
-    "@lowlighter/xml": "jsr:@lowlighter/xml@^4.0.1"
+    "@libs/xml": "jsr:@libs/xml@^5.4.9"
   }
 }

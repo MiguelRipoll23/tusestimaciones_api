@@ -1,5 +1,4 @@
-import { document, node } from "@lowlighter/xml/types";
-import { parse } from "@lowlighter/xml";
+import { parse, xml_document, xml_node } from "@libs/xml";
 import { LineEstimations } from "../versions/v4/interfaces/models/line_estimations_interface.ts";
 
 // Constants
@@ -54,7 +53,11 @@ async function getEstimationsData(
       return response.text();
     })
     .then((text) => {
-      return parse(text, { flatten: true, reviveNumbers: true });
+      return parse(text, {
+        revive: {
+          numbers: true,
+        },
+      });
     })
     .then((document) => {
       parseDocument(document, lineEstimations);
@@ -66,18 +69,21 @@ async function getEstimationsData(
   return lineEstimations;
 }
 
-function parseDocument(document: document, lineEstimations: LineEstimations[]) {
-  const soapEnvelopeNode = document["soap:Envelope"] as node;
-  const soapBodyNode = soapEnvelopeNode?.["soap:Body"] as node;
-  const soapResponseNode = soapBodyNode?.["GetPasoParadaResponse"] as node;
-  const soapResultNode = soapResponseNode?.["GetPasoParadaResult"] as node;
-  const soapItemsNode = soapResultNode?.["PasoParada"] as node;
+function parseDocument(
+  document: xml_document,
+  lineEstimations: LineEstimations[],
+) {
+  const soapEnvelopeNode = document["soap:Envelope"] as xml_node;
+  const soapBodyNode = soapEnvelopeNode?.["soap:Body"] as xml_node;
+  const soapResponseNode = soapBodyNode?.["GetPasoParadaResponse"] as xml_node;
+  const soapResultNode = soapResponseNode?.["GetPasoParadaResult"] as xml_node;
+  const soapItemsNode = soapResultNode?.["PasoParada"] as xml_node;
 
   if (soapItemsNode === undefined) {
     return;
   }
 
-  const soapItems: node[] = [];
+  const soapItems: xml_node[] = [];
 
   if (Array.isArray(soapItemsNode)) {
     soapItems.push(...soapItemsNode);
@@ -86,11 +92,11 @@ function parseDocument(document: document, lineEstimations: LineEstimations[]) {
   }
 
   for (let i = soapItems.length - 1; i >= 0; i--) {
-    const soapItemNode = soapItems[i] as node;
-    const lineLabelNode = soapItemNode["linea"] as node;
+    const soapItemNode = soapItems[i] as xml_node;
+    const lineLabelNode = soapItemNode["linea"] as xml_node;
     const lineDestination = soapItemNode["ruta"] as string;
-    const lineEstimation1Node = soapItemNode["e1"] as node;
-    const lineEstimation2Node = soapItemNode["e2"] as node;
+    const lineEstimation1Node = soapItemNode["e1"] as xml_node;
+    const lineEstimation2Node = soapItemNode["e2"] as xml_node;
 
     let lineLabel = "0";
 

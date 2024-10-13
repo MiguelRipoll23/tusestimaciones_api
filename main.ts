@@ -11,7 +11,7 @@ for (const version in versions) {
 
 async function handleRequest(
   request: Request,
-  serverHandlerInfo: Deno.ServeHandlerInfo<Deno.Addr>
+  serverHandlerInfo: Deno.ServeHandlerInfo<Deno.Addr>,
 ): Promise<Response> {
   const url = new URL(request.url);
   const userAgent = request.headers.get("user-agent");

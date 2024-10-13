@@ -19,7 +19,7 @@ export function validateConfiguration(): void {
 }
 
 export async function getEstimations(
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
 ): Promise<Response> {
   let request: EstimationsRequest | null;
 

@@ -1,4 +1,7 @@
-import { StopEstimations } from "../interfaces/responses/stop_estimations_interface.ts";
+import {
+  StopEstimations,
+  type ShortcutsStopEstimations,
+} from "../interfaces/responses/stop_estimations_interface.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
 import { getNextStopsForLineByStopIdAndLineLabel } from "../utils/line_utils.ts";
 import {
@@ -19,7 +22,7 @@ export function validateConfiguration(): void {
 }
 
 export async function getEstimations(
-  searchParams: URLSearchParams,
+  searchParams: URLSearchParams
 ): Promise<Response> {
   let request: EstimationsRequest | null;
 
@@ -39,7 +42,8 @@ export async function getEstimations(
 function validateRequest(searchParams: URLSearchParams): EstimationsRequest {
   const userStopId = searchParams.get("stopId") ?? null;
   const userLineLabel = searchParams.get("lineLabel") ?? null;
-  const userUpdate = searchParams.get("update") ?? "false";
+  const update = searchParams.get("update") === "true";
+  const shortcuts = searchParams.get("shortcuts") === "true";
 
   if (userStopId === null) {
     throw new Error(MESSAGE_STOP_ID_REQUIRED);
@@ -57,33 +61,45 @@ function validateRequest(searchParams: URLSearchParams): EstimationsRequest {
 
   return {
     stopId,
-    lineLabel: userLineLabel,
-    update: userUpdate === "true",
+    userLineLabel: userLineLabel,
+    update,
+    shortcuts,
   };
 }
 
 async function processRequest(request: EstimationsRequest): Promise<Response> {
   const response: StopEstimations = [[]];
+  const shortcutsResponse: ShortcutsStopEstimations = {
+    estimations: [],
+  };
 
   // Input
-  const { stopId, lineLabel, update } = request;
+  const { stopId, userLineLabel, update } = request;
 
   // Data
-  response[0] = await Adapter.getEstimationsData(stopId, lineLabel);
+  response[0] = await Adapter.getEstimationsData(stopId, userLineLabel);
+  shortcutsResponse.estimations = response[0];
 
   // Additional data
   if (update === false && response[0].length > 0) {
-    if (lineLabel === null) {
+    if (userLineLabel === null) {
       // Add available lines for a stop
       response[1] = getLinesByStopId(stopId);
     } else {
       // Add available stops for a line
-      response[1] = getNextStopsForLineByStopIdAndLineLabel(stopId, lineLabel);
+      response[1] = getNextStopsForLineByStopIdAndLineLabel(
+        stopId,
+        userLineLabel
+      );
     }
   }
 
   const headers = new Headers();
   addAccessControlAllowOriginHeader(headers);
+
+  if (request.shortcuts) {
+    return Response.json(shortcutsResponse, { headers });
+  }
 
   return Response.json(response, { headers });
 }

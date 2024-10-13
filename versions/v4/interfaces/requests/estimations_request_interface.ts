@@ -1,5 +1,6 @@
 export type EstimationsRequest = {
   stopId: number;
-  lineLabel: string | null;
+  userLineLabel: string | null;
   update: boolean;
+  shortcuts: boolean;
 };

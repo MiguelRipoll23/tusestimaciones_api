@@ -26,7 +26,11 @@ export async function getEstimations(
   try {
     request = validateRequest(searchParams);
   } catch (error) {
-    return sendBadRequestResponse(error.message);
+    if (error instanceof Error) {
+      return sendBadRequestResponse(error.message);
+    } else {
+      return sendBadRequestResponse("An unknown error has occurred");
+    }
   }
 
   return await processRequest(request);

@@ -11,7 +11,7 @@ for (const version in versions) {
 
 async function handleRequest(
   request: Request,
-  serverHandlerInfo: Deno.ServeHandlerInfo<Deno.Addr>,
+  serverHandlerInfo: Deno.ServeHandlerInfo<Deno.NetAddr>,
 ): Promise<Response> {
   const url = new URL(request.url);
   const userAgent = request.headers.get("user-agent");
@@ -19,14 +19,7 @@ async function handleRequest(
   const searchParams = url.searchParams;
 
   const remoteAddress = serverHandlerInfo.remoteAddr;
-  let ipAddress: string;
-
-  // TODO: Improve when documentation is available
-  if ("hostname" in remoteAddress) {
-    ipAddress = (remoteAddress as Deno.NetAddr).hostname;
-  } else {
-    ipAddress = "Unknown";
-  }
+  const ipAddress = remoteAddress.hostname;
 
   console.info(ipAddress, userAgent, pathname, searchParams.toString());
 

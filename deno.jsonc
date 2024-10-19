@@ -11,6 +11,6 @@
     "data": "deno --allow-net --allow-write scripts/data.ts"
   },
   "imports": {
-    "@libs/xml": "jsr:@libs/xml@^5.4.9"
+    "@libs/xml": "jsr:@libs/xml@^6.0.0"
   }
 }

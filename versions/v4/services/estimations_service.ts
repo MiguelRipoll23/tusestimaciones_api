@@ -9,7 +9,10 @@ import {
 } from "../utils/response_utils.ts";
 import SoapAdapter from "../../../adapters/soap_adapter.ts";
 import { EstimationsRequest } from "../interfaces/requests/estimations_request_interface.ts";
-import type { ShortcutsLineEstimations } from "../interfaces/models/line_estimations_interface.ts";
+import type {
+  LineEstimations,
+  ShortcutsLineEstimations,
+} from "../interfaces/models/line_estimations_interface.ts";
 
 const Adapter = SoapAdapter;
 
@@ -68,26 +71,30 @@ function validateRequest(searchParams: URLSearchParams): EstimationsRequest {
 }
 
 async function processRequest(request: EstimationsRequest): Promise<Response> {
-  const response: StopEstimations = [[]];
-  const shortcutsResponse: ShortcutsLineEstimations[] = [];
-
   // Input
-  const { stopId, userLineLabel, update } = request;
+  const { stopId, userLineLabel } = request;
 
   // Data
   const estimations = await Adapter.getEstimationsData(stopId, userLineLabel);
-  response[0] = estimations;
+
+  const headers = new Headers();
+  addAccessControlAllowOriginHeader(headers);
 
   if (request.shortcuts) {
-    estimations.forEach(([label, destination, minutes1, minutes2]) => {
-      shortcutsResponse.push({
-        label,
-        destination,
-        minutes1,
-        minutes2,
-      });
-    });
+    return Response.json(processShortcutsRequest(estimations), { headers });
+  } else {
+    return Response.json(processWebRequest(request, estimations), { headers });
   }
+}
+
+function processWebRequest(
+  request: EstimationsRequest,
+  estimations: LineEstimations[],
+): StopEstimations {
+  const response: StopEstimations = [estimations];
+
+  // Input
+  const { stopId, userLineLabel, update } = request;
 
   // Additional data (lines / next stops)
   if (update === false && response[0].length > 0) {
@@ -103,14 +110,24 @@ async function processRequest(request: EstimationsRequest): Promise<Response> {
     }
   }
 
-  const headers = new Headers();
-  addAccessControlAllowOriginHeader(headers);
+  return response;
+}
 
-  if (request.shortcuts) {
-    return Response.json(shortcutsResponse, { headers });
-  }
+function processShortcutsRequest(
+  estimations: LineEstimations[],
+): ShortcutsLineEstimations[] {
+  const response: ShortcutsLineEstimations[] = [];
 
-  return Response.json(response, { headers });
+  estimations.forEach(([label, destination, minutes1, minutes2]) => {
+    response.push({
+      label,
+      destination,
+      minutes1,
+      minutes2,
+    });
+  });
+
+  return response;
 }
 
 export default {

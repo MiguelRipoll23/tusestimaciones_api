@@ -1,5 +1,4 @@
 import {
-  type ShortcutsStopEstimations,
   StopEstimations,
 } from "../interfaces/responses/stop_estimations_interface.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
@@ -10,6 +9,7 @@ import {
 } from "../utils/response_utils.ts";
 import SoapAdapter from "../../../adapters/soap_adapter.ts";
 import { EstimationsRequest } from "../interfaces/requests/estimations_request_interface.ts";
+import type { ShortcutsLineEstimations } from "../interfaces/models/line_estimations_interface.ts";
 
 const Adapter = SoapAdapter;
 
@@ -69,7 +69,7 @@ function validateRequest(searchParams: URLSearchParams): EstimationsRequest {
 
 async function processRequest(request: EstimationsRequest): Promise<Response> {
   const response: StopEstimations = [[]];
-  const shortcutsResponse: ShortcutsStopEstimations = {};
+  const shortcutsResponse: ShortcutsLineEstimations[] = [];
 
   // Input
   const { stopId, userLineLabel, update } = request;
@@ -78,16 +78,18 @@ async function processRequest(request: EstimationsRequest): Promise<Response> {
   const estimations = await Adapter.getEstimationsData(stopId, userLineLabel);
   response[0] = estimations;
 
-  estimations.forEach(([label, destination, minutes1, minutes2], index) => {
-    shortcutsResponse[index.toString()] = {
-      label,
-      destination,
-      minutes1,
-      minutes2,
-    };
-  });
+  if (request.shortcuts) {
+    estimations.forEach(([label, destination, minutes1, minutes2]) => {
+      shortcutsResponse.push({
+        label,
+        destination,
+        minutes1,
+        minutes2,
+      });
+    });
+  }
 
-  // Additional data
+  // Additional data (lines / next stops)
   if (update === false && response[0].length > 0) {
     if (userLineLabel === null) {
       // Add available lines for a stop

@@ -1,6 +1,4 @@
-import {
-  StopEstimations,
-} from "../interfaces/responses/stop_estimations_interface.ts";
+import { StopEstimations } from "../interfaces/responses/stop_estimations_interface.ts";
 import { getLinesByStopId } from "../utils/stop_utils.ts";
 import { getNextStopsForLineByStopIdAndLineLabel } from "../utils/line_utils.ts";
 import {
@@ -25,7 +23,7 @@ export function validateConfiguration(): void {
 }
 
 export async function getEstimations(
-  searchParams: URLSearchParams,
+  searchParams: URLSearchParams
 ): Promise<Response> {
   let request: EstimationsRequest | null;
 
@@ -89,23 +87,26 @@ async function processRequest(request: EstimationsRequest): Promise<Response> {
 
 function processWebRequest(
   request: EstimationsRequest,
-  estimations: LineEstimations[],
+  estimations: LineEstimations[]
 ): StopEstimations {
   const response: StopEstimations = [estimations];
 
-  // Input
-  const { stopId, userLineLabel, update } = request;
+  if (request.update) {
+    return response;
+  }
+
+  const { stopId, userLineLabel } = request;
 
   // Additional data (lines / next stops)
-  if (update === false && response[0].length > 0) {
+  if (estimations.length > 0) {
     if (userLineLabel === null) {
-      // Add available lines for a stop
+      // Add available lines for stop
       response[1] = getLinesByStopId(stopId);
     } else {
-      // Add available stops for a line
+      // Add next stops for line
       response[1] = getNextStopsForLineByStopIdAndLineLabel(
         stopId,
-        userLineLabel,
+        userLineLabel
       );
     }
   }
@@ -114,7 +115,7 @@ function processWebRequest(
 }
 
 function processShortcutsRequest(
-  estimations: LineEstimations[],
+  estimations: LineEstimations[]
 ): ShortcutsLineEstimations[] {
   const response: ShortcutsLineEstimations[] = [];
 

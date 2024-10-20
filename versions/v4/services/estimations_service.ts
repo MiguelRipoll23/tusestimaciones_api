@@ -23,7 +23,7 @@ export function validateConfiguration(): void {
 }
 
 export async function getEstimations(
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
 ): Promise<Response> {
   let request: EstimationsRequest | null;
 
@@ -87,7 +87,7 @@ async function processRequest(request: EstimationsRequest): Promise<Response> {
 
 function processWebRequest(
   request: EstimationsRequest,
-  estimations: LineEstimations[]
+  estimations: LineEstimations[],
 ): StopEstimations {
   const response: StopEstimations = [estimations];
 
@@ -106,7 +106,7 @@ function processWebRequest(
       // Add next stops for line
       response[1] = getNextStopsForLineByStopIdAndLineLabel(
         stopId,
-        userLineLabel
+        userLineLabel,
       );
     }
   }
@@ -115,7 +115,7 @@ function processWebRequest(
 }
 
 function processShortcutsRequest(
-  estimations: LineEstimations[]
+  estimations: LineEstimations[],
 ): ShortcutsLineEstimations[] {
   const response: ShortcutsLineEstimations[] = [];
 
